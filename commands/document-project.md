@@ -1,24 +1,27 @@
 ---
 name: Document Project
-description: Generate comprehensive project documentation with architecture diagrams, code examples, and API docs
+description: Generate streamlined project documentation with flat structure, optimized for Cursor AI context
 author: Clayton Collie
-version: 1.0.0
-tags: [documentation, markdown, project-docs, architecture, wordpress]
+version: 2.0.0
+tags: [documentation, markdown, project-docs, architecture, wordpress, cursor-context]
 ---
 
 # Document Project Slash Command
 
 ## Command Purpose
 
-Analyzes an entire codebase to generate a complete `/docs` directory with structured markdown documentation covering architecture, setup, workflows, and technical implementation details.
+Analyzes an entire codebase to generate a streamlined `/docs` directory with consolidated markdown documentation covering architecture, setup, workflows, and technical implementation details.
 
-The command automatically generates comprehensive documentation that includes:
+The command automatically generates concise documentation that includes:
 - **Architecture diagrams** using Mermaid for visual clarity
 - **Code examples** from your actual codebase
-- **API documentation** when API endpoints are detected
-- **All standard sections** for complete project coverage
+- **Consolidated files** instead of fragmented subdirectories
+- **Cursor-optimized content** designed for AI context inclusion
 
-The documentation balances technical depth with accessibility, making it suitable for both onboarding and reference purposes.
+The documentation prioritizes brevity and clarity, making it perfect for:
+- **Onboarding new developers** with quick-start information
+- **Reference documentation** for existing team members
+- **Cursor AI context** to enhance AI-assisted development
 
 ## Usage
 
@@ -43,58 +46,38 @@ The command is designed for simplicity - just run `/document-project` and it han
 - If `/docs` directory exists: Uses existing docs as context and regenerates fresh documentation, preserving your manual edits and improvements
 - If `/docs` doesn't exist: Creates complete documentation from scratch
 
+**Flat Structure Philosophy:**
+The command generates all documentation files directly in the `/docs` directory (no subdirectories). This makes it easier to:
+- Link documentation in Cursor rules/context
+- Navigate and find information quickly
+- Maintain documentation over time
+- Reduce file fragmentation
+
 No flags, no configuration required. Just run the command.
 
 ## Documentation Structure
 
-The command generates the following directory structure in `/docs`:
+The command generates a simplified, flat structure in `/docs`:
 
 ```
 docs/
-├── README.md                           # Main entry point with navigation
-├── project-overview.md                 # Project context and team info
-├── getting-started.md                  # Quick start guide
-├── architecture/
-│   ├── overview.md                     # System architecture
-│   ├── technology-stack.md             # Technologies and versions
-│   ├── directory-structure.md          # Codebase organization
-│   ├── data-models.md                  # Database schema and models
-│   └── dependencies.md                 # Third-party dependencies
-├── development/
-│   ├── setup.md                        # Local environment setup
-│   ├── workflow.md                     # Development process
-│   ├── branching-strategy.md           # Git workflow
-│   ├── code-standards.md               # Coding conventions
-│   ├── testing.md                      # Testing approach
-│   └── build-process.md                # Build and deployment
-├── features/
-│   ├── feature-index.md                # All features overview
-│   ├── [feature-name].md               # Individual feature docs
-│   └── ...
-├── integrations/
-│   ├── integration-index.md            # All integrations overview
-│   ├── [integration-name].md           # Individual integration docs
-│   └── ...
-├── api/
-│   ├── overview.md                     # API architecture
-│   ├── authentication.md               # Auth methods
-│   ├── endpoints.md                    # Available endpoints
-│   └── webhooks.md                     # Webhook documentation
-├── deployment/
-│   ├── environments.md                 # Environment details
-│   ├── deployment-process.md           # Deployment steps
-│   ├── rollback-procedures.md          # Emergency rollback
-│   └── monitoring.md                   # Monitoring and logging
-├── operations/
-│   ├── database-management.md          # Database operations
-│   ├── cache-management.md             # Cache strategies
-│   ├── backup-restore.md               # Backup procedures
-│   └── troubleshooting.md              # Common issues
-└── reference/
-    ├── glossary.md                     # Terms and definitions
-    ├── commands.md                     # CLI commands reference
-    ├── configuration.md                # Configuration options
-    └── changelog.md                    # Project history
+├── README.md                    # Main entry point with navigation
+├── project-overview.md          # Project context, team info, and goals
+├── development-workflow.md      # Setup, branching, standards, testing, build process
+├── environments.md              # All environments (local, staging, production)
+├── architecture.md              # System design, tech stack, directory structure, data models
+├── features.md                  # Core functionality and features (or separate files for major features)
+├── integrations.md              # All third-party integrations and APIs
+├── operations.md                # Database, caching, backup, troubleshooting
+└── api.md                       # API documentation (only if APIs detected)
+```
+
+**WordPress-specific additions (when detected):**
+```
+docs/
+├── content-types.md             # Custom post types, taxonomies, custom fields
+├── block-editor.md              # Custom blocks, patterns, and modifications
+└── themes.md                    # Theme structure and customization
 ```
 
 ## Analysis Process
@@ -129,11 +112,14 @@ docs/
 ### Phase 5: Documentation Generation
 1. Create README.md with navigation structure
 2. Generate project-overview.md with context
-3. Create getting-started.md for onboarding
-4. Build architecture documentation with diagrams
-5. Document each major feature area with code examples
-6. Create reference documentation
-7. Generate API documentation (if APIs detected)
+3. Create development-workflow.md combining setup, branching, standards, testing, and build processes
+4. Build environments.md with all environment information
+5. Create architecture.md combining system design, tech stack, and data models with diagrams
+6. Document features.md with core functionality (or separate files for major features only)
+7. Generate integrations.md consolidating all third-party services
+8. Create operations.md with database, caching, backup, and troubleshooting
+9. Generate api.md (only if APIs detected)
+10. Add WordPress-specific files if detected (content-types.md, block-editor.md, themes.md)
 
 ### Phase 6: Quality Assurance
 1. Verify all internal links work
@@ -192,144 +178,107 @@ Links to related docs
 External links and references
 ```
 
-### WordPress-Specific Sections
-When WordPress is detected, additional sections are automatically generated:
-
-```
-wordpress/
-├── multisite.md                  # Multisite configuration
-├── themes.md                     # Theme structure
-├── plugins.md                    # Custom plugins
-├── content-types.md              # CPTs and taxonomies
-├── block-editor.md               # Gutenberg customization
-├── hooks-filters.md              # WordPress hooks used
-└── performance.md                # Caching and optimization
-```
-
 ### Documentation Style
 
 The command automatically adapts its writing style to be:
-- **Clear and Accessible**: Written for new team members to understand
-- **Technically Accurate**: Includes specific implementation details
+- **Concise and Scannable**: Written for quick reference and Cursor context inclusion
+- **Technically Accurate**: Includes specific implementation details without fluff
 - **Practical**: Focuses on how to use and maintain the system
-- **Progressive**: Starts with high-level concepts, links to deeper details
+- **Well-Organized**: Uses clear headers and bullet points for easy navigation
 
-The documentation balances technical depth with readability, making it suitable for both onboarding new developers and serving as a reference for experienced team members.
+The documentation prioritizes brevity and clarity, making it suitable for both onboarding new developers and serving as context for AI-assisted development in Cursor.
 
 ## Content Guidelines
 
-### Project Overview Requirements
-- **Client/Stakeholder Information**: Who is this for?
-- **Project Goals**: What problems does it solve?
-- **Team Structure**: Who works on this? (optional)
-- **Timeline**: When was it built? Major milestones?
-- **Tech Stack Summary**: Primary technologies used
+### project-overview.md
+- Client/stakeholder information
+- Project goals and problems it solves
+- Team structure (optional)
+- Timeline and major milestones
+- High-level tech stack summary
 
-### Getting Started Requirements
-- **Prerequisites**: Required software and versions
-- **Installation Steps**: Clear, numbered steps
-- **Configuration**: Environment variables and settings
-- **Verification**: How to confirm setup worked
-- **First Steps**: What to do after setup
+### development-workflow.md
+- Prerequisites and required software versions
+- Local environment setup steps
+- Branch management strategy (e.g., trunk-based, GitFlow)
+- Code standards and conventions
+- Testing approach
+- Build and deployment process
 
-### Architecture Documentation Requirements
-- **System Diagram**: Visual representation using Mermaid
-- **Key Components**: Major parts of the system
-- **Data Flow**: How data moves through the system
-- **Security Considerations**: Authentication and authorization
-- **Performance Considerations**: Caching, optimization
+### environments.md
+- Local development environment details
+- Staging environment information and URLs
+- Production environment information and URLs
+- Environment-specific configuration differences
+- Access credentials location (without exposing them)
 
-### Feature Documentation Requirements
-- **Purpose**: What does this feature do?
-- **User Flow**: How users interact with it
-- **Technical Implementation**: How it's built
-- **Configuration**: Settings and options
-- **Edge Cases**: Known limitations or special cases
+### architecture.md
+- System architecture diagram (Mermaid)
+- Key components and their relationships
+- Technology stack with versions
+- Directory structure overview
+- Database schema and data models
+- Security and authentication approach
+- Performance and caching strategies
 
-### Integration Documentation Requirements
-- **Service Overview**: What service is integrated?
-- **Authentication**: How to authenticate
-- **Configuration**: Required settings
-- **Usage Examples**: Code samples
-- **Troubleshooting**: Common issues
+### features.md
+- Core features overview
+- For each major feature: purpose, implementation, and configuration
+- User flows for key functionality
+- Important edge cases and limitations
+
+**Note:** For projects with many complex features, you may create separate feature files (e.g., `user-management.md`, `payment-processing.md`) instead of consolidating everything into features.md. Use judgment - if a single feature would make features.md extremely long (>500 lines), split it out.
+
+### integrations.md
+- List of all third-party services
+- For each integration: purpose, authentication, configuration, and code examples
+- Webhook handlers if applicable
+- Troubleshooting common integration issues
+
+### operations.md
+- Database management (backup, restore, sync between environments)
+- Cache management strategies
+- Common troubleshooting steps
+- Monitoring and logging approach
+- Performance optimization tips
+
+### api.md (only if APIs detected)
+- API architecture overview
+- Authentication methods
+- Available endpoints with examples
+- Webhook documentation
+- Rate limiting and error handling
 
 ## Example Output: README.md
 
 ```markdown
 # MyProject Documentation
 
-Welcome to MyProject documentation. This is a WordPress multisite platform with custom themes and integrations serving multiple international markets.
+Welcome to MyProject documentation. This WordPress multisite platform with custom themes and integrations serves multiple international markets.
 
 ## Getting Started
 
-Start here to understand the project and get set up:
+Start here to understand the project context and setup:
 
-- **[Project Overview](project-overview.md)** - Project context, goals, and team
-- **[Getting Started](getting-started.md)** - Local setup and first steps
-- **[Development Workflow](development/workflow.md)** - How we build and ship features
+- **[Project Overview](project-overview.md)** - Team structure, client information, and project context
+- **[Development Workflow](development-workflow.md)** - Branch management, deployment process, and development guidelines
+- **[Environments](environments.md)** - Production, staging, and local environment information
 
-## Architecture
+## Technical Documentation
 
-Understand the technical foundation:
+### Core System
+- **[Architecture](architecture.md)** - System design, tech stack, directory structure, and data models
+- **[Features](features.md)** - Core functionality and features
+- **[API](api.md)** - API endpoints, authentication, and integration guide
 
-- **[System Architecture](architecture/overview.md)** - High-level system design
-- **[Technology Stack](architecture/technology-stack.md)** - Technologies and versions
-- **[Directory Structure](architecture/directory-structure.md)** - Code organization
-- **[Data Models](architecture/data-models.md)** - Database schema
+### WordPress-Specific (if detected)
+- **[Content Types](content-types.md)** - Post types, taxonomies, and custom fields
+- **[Block Editor](block-editor.md)** - Custom blocks, patterns, and core block modifications
+- **[Themes](themes.md)** - Theme structure and customization approach
 
-## Features
-
-Core functionality documentation:
-
-- **[Feature Index](features/feature-index.md)** - All features overview
-- **[User Management](features/user-management.md)** - User roles and permissions
-- **[Content Management](features/content-management.md)** - Content types and editing
-- **[Multi-language Support](features/multi-language.md)** - Translation workflow
-
-## Development
-
-Build and maintain the project:
-
-- **[Local Setup](development/setup.md)** - Environment configuration
-- **[Branching Strategy](development/branching-strategy.md)** - Git workflow
-- **[Code Standards](development/code-standards.md)** - Coding conventions
-- **[Testing](development/testing.md)** - Testing approach
-- **[Build Process](development/build-process.md)** - Build and compilation
-
-## Integrations
-
-Third-party services and APIs:
-
-- **[Integration Index](integrations/integration-index.md)** - All integrations
-- **[Formstack](integrations/formstack.md)** - Form submission handling
-- **[OneTrust](integrations/onetrust.md)** - Cookie consent management
-- **[Analytics](integrations/analytics.md)** - Tracking and analytics
-
-## Deployment
-
-Deploy and manage environments:
-
-- **[Environments](deployment/environments.md)** - Production, staging, local
-- **[Deployment Process](deployment/deployment-process.md)** - How to deploy
-- **[Rollback Procedures](deployment/rollback-procedures.md)** - Emergency rollback
-- **[Monitoring](deployment/monitoring.md)** - Health checks and alerts
-
-## Operations
-
-Day-to-day management:
-
-- **[Database Management](operations/database-management.md)** - Sync and backup
-- **[Troubleshooting](operations/troubleshooting.md)** - Common issues
-- **[Performance](operations/performance.md)** - Optimization tips
-
-## Reference
-
-Quick reference materials:
-
-- **[Glossary](reference/glossary.md)** - Terms and definitions
-- **[Commands](reference/commands.md)** - CLI commands
-- **[Configuration](reference/configuration.md)** - All configuration options
-- **[Changelog](reference/changelog.md)** - Version history
+### Integrations & Operations
+- **[Third-Party Integrations](integrations.md)** - Formstack, Analytics, and other external services
+- **[Operations](operations.md)** - Database sync, caching, backup procedures, and troubleshooting
 
 ## Quick Links
 
@@ -342,19 +291,6 @@ Quick reference materials:
 - **Production**: [www.example.com](https://www.example.com)
 - **Staging**: [staging.example.com](https://staging.example.com)
 - **Local**: [myproject.local](http://myproject.local)
-
-### External Resources
-- [Client Portal](https://portal.client.com)
-- [Design System](https://design.example.com)
-- [API Documentation](https://api.example.com/docs)
-
-## Contributing
-
-See [development/workflow.md](development/workflow.md) for contribution guidelines.
-
-## Support
-
-For questions or issues, contact the development team or open an issue in the repository.
 ```
 
 ## Intelligent Content Detection
@@ -457,13 +393,15 @@ When the command detects an existing `/docs` directory, it intelligently:
 2. **Preserves manual improvements** like custom sections, additional notes, or refined explanations
 3. **Updates with current codebase** to reflect any code changes since last generation
 4. **Maintains consistency** by following the structure and tone of existing docs
-5. **Adds new sections** for features or integrations that didn't exist before
+5. **Consolidates content** while preserving important details from existing files
 
 This means you can:
 - Run the command multiple times as your project evolves
 - Make manual edits to documentation without losing them
 - Keep docs in sync with codebase changes automatically
 - Refine documentation over time with each generation improving on the last
+
+**Important:** If your existing docs use subdirectories (from an older version of this command), the new generation will consolidate them into the flat structure while preserving all content.
 
 **To keep documentation current:** Simply run `/document-project` whenever you want to update your docs. The command handles everything automatically.
 
@@ -480,16 +418,16 @@ The command adds TODO markers for items requiring human review:
 
 ## Best Practices Applied
 
-1. **Clear Navigation**: Every document links to related docs
-2. **Consistent Structure**: All docs follow the same format
-3. **Progressive Disclosure**: Start simple, link to details
-4. **Code Examples**: Real examples from your codebase in every relevant section
-5. **Version Information**: Document versions of dependencies
-6. **Link Validation**: All internal links are verified
-7. **Search-Friendly**: Use descriptive headers and keywords
-8. **Visual Diagrams**: Mermaid diagrams for architecture, data flow, and deployment
-9. **Quick Reference**: Commands and configurations easy to find
-10. **Maintenance**: Clear ownership and update procedures
+1. **Flat Structure**: All files in `/docs` root for easy access and linking
+2. **Consolidated Content**: Related topics combined into single files to reduce fragmentation
+3. **Concise and Scannable**: Optimized for quick reference and AI context inclusion
+4. **Clear Navigation**: README provides clear entry points to all documentation
+5. **Code Examples**: Real examples from your codebase where relevant
+6. **Visual Diagrams**: Mermaid diagrams for complex concepts (architecture, data flow)
+7. **Link Validation**: All internal links are verified
+8. **Context-Ready**: Written for both human readers and Cursor AI context
+9. **Minimal Redundancy**: Information appears once in the most logical location
+10. **TODO Markers**: Clear indicators for sections requiring manual review
 
 ## Implementation Notes
 
@@ -497,15 +435,19 @@ The command adds TODO markers for items requiring human review:
 When executing this command:
 
 1. Check for existing `/docs` directory first
-2. If exists, read and analyze all existing documentation
+2. If exists, read and analyze all existing documentation to preserve manual improvements
 3. Request workspace access to read all project files
-4. Parse project configuration files
-5. Build mental model of project structure
-6. Generate documentation that builds on existing docs (if present)
-7. Create all directories before writing files
-8. Validate all generated links
-9. Present summary of generated documentation
-10. Highlight sections needing manual review
+4. Parse project configuration files (package.json, composer.json, etc.)
+5. Build mental model of project structure and features
+6. Generate consolidated documentation in flat structure:
+   - Combine related topics into single files (e.g., all development info in development-workflow.md)
+   - Keep content concise and scannable for Cursor context
+   - Use bullet points and clear headers instead of lengthy prose
+7. Include Mermaid diagrams for architecture visualization
+8. Add only WordPress-specific files if WordPress is detected
+9. Validate all generated links
+10. Present summary of generated documentation
+11. Highlight sections needing manual review with TODO markers
 
 ### Performance Considerations
 - For large codebases (>10,000 files), focus on key directories
@@ -534,24 +476,24 @@ Languages: PHP, JavaScript, CSS
 Package managers: Composer, npm
 Build tools: Webpack
 
-Generating documentation structure...
+Generating documentation...
 
 ✓ Created /docs/README.md
 ✓ Created /docs/project-overview.md
-✓ Created /docs/getting-started.md
-✓ Created /docs/architecture/ (5 files)
-✓ Created /docs/development/ (6 files)
-✓ Created /docs/features/ (8 files)
-✓ Created /docs/integrations/ (4 files)
-✓ Created /docs/deployment/ (4 files)
-✓ Created /docs/operations/ (4 files)
-✓ Created /docs/wordpress/ (7 files)
-✓ Created /docs/reference/ (4 files)
+✓ Created /docs/development-workflow.md
+✓ Created /docs/environments.md
+✓ Created /docs/architecture.md
+✓ Created /docs/features.md
+✓ Created /docs/integrations.md
+✓ Created /docs/operations.md
+✓ Created /docs/content-types.md
+✓ Created /docs/block-editor.md
+✓ Created /docs/themes.md
 
-Documentation generated: 42 markdown files
-Diagrams included: 8 Mermaid diagrams
-Code examples: 25+ examples from your codebase
-Manual review items: 12
+Documentation generated: 11 markdown files
+Diagrams included: 5 Mermaid diagrams
+Code examples: 15+ examples from your codebase
+Manual review items: 6
 
 Next steps:
 1. Review /docs/README.md for navigation
@@ -562,53 +504,38 @@ Next steps:
 Documentation is ready! Start with /docs/README.md
 ```
 
-## Configuration File
-
-Optionally create `.cursor/document-project.config.json`:
-
-```json
-{
-  "excludePatterns": [
-    "node_modules/**",
-    "vendor/**",
-    ".git/**",
-    "*.log"
-  ],
-  "customSections": [
-    {
-      "name": "custom-workflows",
-      "title": "Custom Workflows",
-      "path": "operations/custom-workflows.md"
-    }
-  ],
-  "teamInfo": {
-    "include": false,
-    "parseFromGit": false
-  },
-  "branding": {
-    "projectName": "Override detected name",
-    "companyName": "Your Company"
-  }
-}
-```
-
 ## Success Criteria
 
 Documentation is considered complete when:
 
-- ✅ All major features are documented
-- ✅ Setup process is clear and tested
-- ✅ Architecture is explained with diagrams
-- ✅ All integrations have configuration docs
-- ✅ Deployment process is step-by-step
-- ✅ Troubleshooting guide covers common issues
+- ✅ All documentation files in flat `/docs` structure
+- ✅ All major features are documented concisely
+- ✅ Setup process is clear in development-workflow.md
+- ✅ Architecture is explained with diagrams in architecture.md
+- ✅ All integrations consolidated in integrations.md
+- ✅ Environment information complete in environments.md
+- ✅ Operations and troubleshooting in operations.md
 - ✅ All internal links work correctly
-- ✅ Code examples are accurate
+- ✅ Code examples are accurate and from actual codebase
+- ✅ Content is concise and scannable for Cursor context
 - ✅ No sensitive information is exposed
-- ✅ Manual review items are marked
+- ✅ Manual review items marked with TODO comments
 
 ---
 
-**Command Version**: 1.0.0  
-**Last Updated**: 2025-10-26  
+**Command Version**: 2.0.0  
+**Last Updated**: 2025-10-27  
 **Compatible With**: Cursor AI Editor
+
+## Changelog
+
+### Version 2.0.0 (2025-10-27)
+- **Breaking Change**: Simplified to flat directory structure (no subdirectories)
+- Consolidated related documentation into single files
+- Reduced typical output from 40+ files to 8-12 files
+- Optimized content for Cursor AI context inclusion
+- Enhanced focus on concise, scannable documentation
+- Updated to follow Velcro project documentation pattern
+
+### Version 1.0.0 (2025-10-26)
+- Initial release with nested directory structure
