@@ -16,27 +16,31 @@ By symlinking this repository into your global `.cursor` directory, you get inst
 
 ### 1. Clone the Repository
 
-```bash
-git clone https://github.com/claytoncollie/cursor-for-clayton.git ~/cursor-config
-```
-
-### 2. Symlink to Your Project
-
-Navigate to your global directory and create a symlink from this repository to your global `.cursor` directory:
+Clone this repository to your preferred location:
 
 ```bash
-ln -s ~/cursor-config .cursor
+git clone git@github.com:claytoncollie/cursor-for-clayton.git
 ```
+
+### 2. Create Symlinks
+
+Navigate to your global `.cursor` directory and create symlinks for the `commands` and `rules` directories:
+
+```bash
+cd ~/.cursor
+ln -s ~/www/cursor-for-clayton/commands ~/.cursor/commands
+ln -s ~/www/cursor-for-clayton/rules ~/.cursor/rules
+```
+
+**Note:** If you cloned the repository to a different location, adjust the paths accordingly in the symlink commands.
 
 ### 3. Verify Setup
 
-Check that the symlink was created successfully:
+Check that the symlinks were created successfully:
 
 ```bash
-ls -la .cursor
+ls -la ~/.cursor
 ```
-
-You should see a symlink pointing to your cloned repository.
 
 ### 4. Restart Cursor
 
@@ -47,8 +51,21 @@ Restart the Cursor editor to load the new commands and rules.
 To get the latest commands and rules:
 
 ```bash
-cd ~/cursor-config
+cd ~/www/cursor-for-clayton
 git pull origin trunk
 ```
 
-Changes will be immediately available in all projects using the symlink.
+Changes will be immediately available in Cursor since the symlinks point to the repository.
+
+## Troubleshooting
+
+**If symlinks already exist:**
+
+Remove the existing symlinks before creating new ones:
+
+```bash
+cd ~/.cursor
+rm -rf commands rules
+ln -s ~/www/cursor-for-clayton/commands ~/.cursor/commands
+ln -s ~/www/cursor-for-clayton/rules ~/.cursor/rules
+```
