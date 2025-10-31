@@ -533,6 +533,22 @@ After creating a PRD:
 
 ---
 
+## ✨ Next Command
+
+After completing `/plan-feature`:
+
+**Next Step:** Run `/execute-plan`
+
+```bash
+/execute-plan
+```
+
+**What it does:** Reads your PRD and works through tasks interactively one-by-one, tracking progress, blockers, and newly discovered work while maintaining task status.
+
+**Workflow:** The execute-plan command will systematically guide you through implementing each task in your planning document.
+
+---
+
 **Command Version**: 1.0.0  
 **Last Updated**: 2025-10-31  
 **Compatible With**: Cursor AI Editor

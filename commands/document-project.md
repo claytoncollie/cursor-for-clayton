@@ -523,6 +523,26 @@ Documentation is considered complete when:
 
 ---
 
+## ✨ Standalone Command
+
+**This is a standalone utility command.**
+
+`/document-project` is not part of the main workflow sequence. Use it anytime you need to generate or update comprehensive project documentation.
+
+**Common usage scenarios:**
+- When starting a new project to establish documentation foundation
+- After major architectural changes or refactoring
+- When onboarding new team members who need project context
+- Periodically (monthly/quarterly) to keep documentation current with codebase
+- Before major releases to ensure documentation is up-to-date
+
+**Related documentation command:**
+- Use `/document-file` to generate DocBlocks for individual PHP files
+
+**Tip:** Run this command regularly (e.g., monthly) to keep your `/docs` directory synchronized with codebase changes. The smart update behavior preserves your manual improvements while refreshing technical details.
+
+---
+
 **Command Version**: 2.0.0  
 **Last Updated**: 2025-10-27  
 **Compatible With**: Cursor AI Editor

@@ -305,6 +305,23 @@ Documentation is considered complete when:
 
 ---
 
+## ✨ Standalone Command
+
+**This is a standalone utility command.**
+
+`/document-file` is not part of the main workflow sequence. Use it anytime you need to document PHP files with DocBlocks.
+
+**Common usage scenarios:**
+- After creating new PHP classes or functions
+- When onboarding to a project with undocumented code
+- As part of code cleanup or refactoring efforts
+- Before code reviews to improve documentation quality
+
+**Related documentation command:**
+- Use `/document-project` to generate comprehensive project documentation
+
+---
+
 **Command Version**: 2.0.0  
 **Last Updated**: 2025-10-27  
 **Compatible With**: Cursor AI Editor

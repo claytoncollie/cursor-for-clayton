@@ -682,6 +682,24 @@ After testing:
 
 ---
 
+## ✨ Next Command
+
+After completing `/write-test`:
+
+**Next Step:** Run `/review-code`
+
+```bash
+/review-code
+```
+
+**What it does:** Performs a thorough pre-push code review to catch issues early, validate against design docs, and ensure code quality standards are met before pushing changes.
+
+**Why this matters:** Acts as your final quality gate before sharing code with the team. Catches security issues, performance problems, and validates that all your tests are comprehensive.
+
+**Before running:** Make sure all your tests pass and you've achieved the coverage targets identified during `/write-test`.
+
+---
+
 **Command Version**: 1.0.0  
 **Last Updated**: 2025-10-31  
 **Compatible With**: Cursor AI Editor

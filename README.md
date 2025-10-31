@@ -85,6 +85,27 @@ Restart the Cursor editor to load the new commands.
 
 The workflow commands provide a structured approach to engineering work, from estimation through QA handoff.
 
+### Recommended Workflow Order
+
+The commands are designed to work together in a specific sequence:
+
+```
+1. /estimate-ticket     → Create engineering ticket
+2. /plan-feature        → Create detailed PRD (optional for complex features)
+3. /execute-plan        → Implement tasks from PRD
+4. /check-implementation → Validate code against design
+5. /write-test          → Generate tests for coverage
+6. /review-code         → Pre-push code review
+7. /handoff-qa          → Generate QA documentation
+8. /debug-issue         → Use anytime issues arise (not sequential)
+```
+
+**Documentation Commands** (standalone utilities):
+- `/document-file` - Generate DocBlocks for PHP files
+- `/document-project` - Generate project documentation
+
+---
+
 ### Command Overview
 
 #### 1. `/estimate-ticket` - Code-Aware Ticket Writer

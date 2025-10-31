@@ -427,10 +427,28 @@ Before finishing validation:
 ## Related Commands
 
 After validation:
-- Use `/writing-test` to add missing tests
-- Use `/debug` if issues are found
-- Use `/code-review` for final pre-push review
+- Use `/write-test` to add missing tests
+- Use `/debug-issue` if issues are found
+- Use `/review-code` for final pre-push review
 - Use `/update-planning` to document deviations
+
+---
+
+## ✨ Next Command
+
+After completing `/check-implementation`:
+
+**Next Step:** Run `/write-test`
+
+```bash
+/write-test
+```
+
+**What it does:** Generates unit and integration tests for your implementation, targeting 100% code coverage. Creates test cases aligned with acceptance criteria from your estimate ticket.
+
+**Why this matters:** Ensures your code is thoroughly tested before code review and prevents regressions in the future.
+
+**If issues found:** If `/check-implementation` revealed problems, use `/debug-issue` to fix them first, then return to this workflow.
 
 ---
 

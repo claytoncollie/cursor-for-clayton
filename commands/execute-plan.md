@@ -329,6 +329,68 @@ During execution, I'll provide WordPress-aware guidance:
 - **Security** (nonce verification, data sanitization)
 - **Performance** (caching, transients, object cache)
 
+## Communication Guidelines
+
+**Important:** All documentation and status updates are visible to the entire project team, including clients.
+
+### Writing Style
+
+✅ **DO:**
+- Use plain English without jargon
+- Keep updates brief and focused
+- State what was done, not how you did it
+- Use simple, direct sentences
+- Focus on outcomes and results
+
+❌ **DON'T:**
+- Include technical implementation details
+- Write lengthy explanations or rambling notes
+- Use developer-specific terminology
+- Explain obvious things
+- Over-explain your process
+
+### Output Format
+
+**Critical:** When providing ticket updates or markdown to paste into Teamwork:
+
+✅ **DO:**
+- Provide ONLY the formatted content to copy/paste
+- Deliver the ticket information directly
+- Let the content speak for itself
+
+❌ **DON'T:**
+- Summarize what you're about to provide
+- Explain what you just wrote
+- Add meta-commentary like "Here's the update..." or "I've prepared..."
+- Include unnecessary preambles or conclusions
+
+### Examples
+
+**Good:**
+```markdown
+- [x] Create carousel-view.php render partial
+  - Notes: Added carousel view with arrow navigation
+  - Completed: 2025-10-31
+```
+
+**Bad (Unnecessary Noise):**
+```
+Great! I've prepared the following update for you to paste into Teamwork. This captures what was completed during this task. Here it is:
+
+- [x] Create carousel-view.php render partial
+  - Notes: Added carousel view with arrow navigation
+  - Completed: 2025-10-31
+
+As you can see, I've marked this as complete and included the key details about what was accomplished.
+```
+
+**Too Verbose:**
+```markdown
+- [x] Create carousel-view.php render partial
+  - Notes: So I started by looking at the existing featured-laureates-carousel.php file to understand the pattern we're using, and then I created a new file called carousel-view.php in the blocks/queried-content directory. I followed the same structure as the laureates carousel but adapted it for our use case. I also made sure to include all the accessibility attributes like aria-labels because that's important for screen readers and we want to follow WCAG guidelines. I used get_template_part() to load the card partial which is the WordPress way of doing things...
+  - Completed: 2025-10-31
+```
+
 ## Best Practices
 
 ### What Makes Good Task Execution
@@ -470,13 +532,31 @@ Moving to next section: Core Features (5 tasks)
 
 During execution:
 - Use `/check-implementation` to validate work against plan
-- Use `/writing-test` to generate tests for completed features
-- Use `/debug` if you encounter issues
-- Use `/code-review` before committing major changes
+- Use `/write-test` to generate tests for completed features
+- Use `/debug-issue` if you encounter issues
+- Use `/review-code` before committing major changes
 
 After execution:
 - Use `/update-planning` to reconcile progress with plan
-- Use `/qa-handoff` to prepare for QA testing
+- Use `/handoff-qa` to prepare for QA testing
+
+---
+
+## ✨ Next Command
+
+After completing `/execute-plan`:
+
+**Next Step:** Run `/check-implementation`
+
+```bash
+/check-implementation
+```
+
+**What it does:** Compares your implementation against the PRD and estimate ticket to ensure the code matches the planned approach and satisfies all requirements.
+
+**Why this matters:** Validates that your implementation aligns with the design before moving forward with testing and review.
+
+**Alternative:** If you encounter issues during execution, use `/debug-issue` to troubleshoot before continuing.
 
 ---
 

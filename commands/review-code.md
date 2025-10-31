@@ -576,6 +576,29 @@ After code review:
 
 ---
 
+## ✨ Next Command
+
+After completing `/review-code`:
+
+**Next Step:** Run `/handoff-qa`
+
+```bash
+/handoff-qa
+```
+
+**What it does:** Verifies that acceptance criteria from your estimate ticket are met, generates comprehensive QA handoff documentation, and creates ready-to-paste text for Teamwork tickets.
+
+**Why this matters:** Prepares thorough testing documentation for your QA team, ensuring they understand what was built and how to test it effectively.
+
+**Before running:** 
+- Ensure all blocking issues from `/review-code` are fixed
+- Deploy your changes to the staging environment
+- Verify the feature works as expected in staging
+
+**After running:** Paste the generated documentation into your Teamwork ticket and move it to "Ready for QA"
+
+---
+
 **Command Version**: 1.0.0  
 **Last Updated**: 2025-10-31  
 **Compatible With**: Cursor AI Editor

@@ -685,6 +685,24 @@ After QA feedback:
 
 ---
 
+## ✨ Workflow Complete!
+
+After completing `/handoff-qa`:
+
+**You've completed the development workflow! 🎉**
+
+**Final Steps:**
+1. Paste the generated QA handoff documentation into your Teamwork ticket
+2. Move the ticket to "Ready for QA" status
+3. Notify the QA team that the feature is ready for testing
+4. Monitor for QA feedback and be ready to address any issues
+
+**If QA finds issues:** Use `/debug-issue` to troubleshoot and fix problems, then repeat relevant workflow steps as needed.
+
+**Starting a new feature?** Begin again with `/estimate-ticket` for your next task.
+
+---
+
 **Command Version**: 1.0.0  
 **Last Updated**: 2025-10-31  
 **Compatible With**: Cursor AI Editor

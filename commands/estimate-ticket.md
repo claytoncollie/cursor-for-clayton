@@ -375,6 +375,22 @@ After creating an estimate ticket:
 
 ---
 
+## ✨ Next Command
+
+After completing `/estimate-ticket`:
+
+**Next Step:** Run `/plan-feature`
+
+```bash
+/plan-feature
+```
+
+**What it does:** Creates a detailed Product Requirements Document (PRD) for features needing comprehensive planning. This PRD will reference your estimate ticket and provide the roadmap for implementation.
+
+**When to skip:** For simple features, you may skip `/plan-feature` and work directly from the estimate ticket using `/execute-plan`.
+
+---
+
 **Command Version**: 1.0.0  
 **Last Updated**: 2025-10-31  
 **Compatible With**: Cursor AI Editor

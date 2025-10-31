@@ -589,6 +589,27 @@ After fixing:
 
 ---
 
+## ✨ Next Command
+
+After completing `/debug-issue`:
+
+**This command is used anytime issues arise during the workflow.**
+
+**After fixing the issue, return to where you were:**
+
+- **During `/execute-plan`?** → Continue with `/execute-plan` or move to `/check-implementation`
+- **During `/check-implementation`?** → Re-run `/check-implementation` to verify the fix
+- **During `/write-test`?** → Add regression tests, then continue to `/review-code`
+- **During `/review-code`?** → Re-run `/review-code` after fixes
+- **After QA feedback?** → Fix the issue, add tests, then run `/handoff-qa` again
+
+**Always after debugging:**
+1. Run `/write-test` to add regression tests that prevent the issue from recurring
+2. Run `/check-implementation` to ensure the fix aligns with requirements
+3. Continue with your normal workflow from where you left off
+
+---
+
 **Command Version**: 1.0.0  
 **Last Updated**: 2025-10-31  
 **Compatible With**: Cursor AI Editor
