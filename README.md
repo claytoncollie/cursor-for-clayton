@@ -12,6 +12,21 @@ This repository contains reusable Cursor AI configurations including:
 
 By symlinking this repository into your global `.cursor` directory, you get instant access to all custom commands and rules without duplicating files across multiple projects.
 
+## What's Included
+
+### Commands
+
+Custom slash commands for documentation and code analysis tasks.
+
+### Rules
+
+Global development guidelines in `rules/cursor-global-rules.md` covering:
+- Development approach and methodology
+- Code quality standards
+- Backend, frontend, database, and DevOps best practices
+
+**To use:** Copy the contents of `cursor-global-rules.md` and paste into Cursor Settings → General → Rules for AI.
+
 ## Setup Instructions
 
 ### 1. Clone the Repository
@@ -22,50 +37,57 @@ Clone this repository to your preferred location:
 git clone git@github.com:claytoncollie/cursor-for-clayton.git
 ```
 
-### 2. Create Symlinks
+### 2. Setup Commands (Symlink)
 
-Navigate to your global `.cursor` directory and create symlinks for the `commands` and `rules` directories:
+Create a symlink for the `commands` directory:
 
 ```bash
 cd ~/.cursor
 ln -s ~/www/cursor-for-clayton/commands ~/.cursor/commands
-ln -s ~/www/cursor-for-clayton/rules ~/.cursor/rules
 ```
 
-**Note:** If you cloned the repository to a different location, adjust the paths accordingly in the symlink commands.
+**Note:** If you cloned the repository to a different location, adjust the path accordingly.
 
-### 3. Verify Setup
+### 3. Setup Rules (Manual Copy)
 
-Check that the symlinks were created successfully:
+Copy the rules content into Cursor Settings:
+
+1. Open `rules/cursor-global-rules.md` from this repository
+2. Copy the entire contents
+3. Open Cursor Settings → General → Rules for AI
+4. Paste the contents and save
+
+### 4. Verify Setup
+
+Check that the commands symlink was created successfully:
 
 ```bash
-ls -la ~/.cursor
+ls -la ~/.cursor/commands
 ```
 
-### 4. Restart Cursor
+### 5. Restart Cursor
 
-Restart the Cursor editor to load the new commands and rules.
+Restart the Cursor editor to load the new commands.
 
 ## Updating
 
-To get the latest commands and rules:
+**Commands:** Changes are immediately available since the symlink points to the repository.
+
+**Rules:** After pulling updates, manually copy the updated `cursor-global-rules.md` content into Cursor Settings → General → Rules for AI.
 
 ```bash
 cd ~/www/cursor-for-clayton
 git pull origin trunk
 ```
 
-Changes will be immediately available in Cursor since the symlinks point to the repository.
-
 ## Troubleshooting
 
-**If symlinks already exist:**
+**If commands symlink already exists:**
 
-Remove the existing symlinks before creating new ones:
+Remove and recreate the symlink:
 
 ```bash
 cd ~/.cursor
-rm -rf commands rules
+rm -rf commands
 ln -s ~/www/cursor-for-clayton/commands ~/.cursor/commands
-ln -s ~/www/cursor-for-clayton/rules ~/.cursor/rules
 ```
