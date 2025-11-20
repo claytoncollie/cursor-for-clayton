@@ -16,6 +16,9 @@ By symlinking this repository into your global `.cursor` directory, you get inst
 
 ### Commands
 
+#### Configuration Commands
+- **generate-cursor-rules** - Generate project-specific Cursor AI rules based on your codebase structure
+
 #### Documentation Commands
 - **document-file** - Intelligently generate PHP DocBlocks for undocumented files and classes
 - **document-project** - Project-wide documentation generation
@@ -100,13 +103,74 @@ The commands are designed to work together in a specific sequence:
 8. /debug-issue         → Use anytime issues arise (not sequential)
 ```
 
-**Documentation Commands** (standalone utilities):
-- `/document-file` - Generate DocBlocks for PHP files
-- `/document-project` - Generate project documentation
+**Configuration & Documentation Commands** (use together in this order):
+1. `/document-project` - Generate comprehensive project documentation **[Run First]**
+2. `/generate-cursor-rules` - Generate Cursor AI rules that reference the docs **[Run Second]**
+
+**File Documentation Command** (standalone utility):
+- `/document-file` - Generate DocBlocks for individual PHP files
 
 ---
 
 ### Command Overview
+
+#### 0. `/generate-cursor-rules` - Project-Specific Rules Generator
+
+⚠️ **Run `/document-project` first!** This command works best when documentation already exists.
+
+Analyzes your WordPress project structure and generates comprehensive Cursor AI rules tailored to your codebase.
+
+**Recommended workflow:**
+```bash
+# Step 1: Generate/update documentation
+/document-project
+
+# Step 2: Generate rules that reference the docs
+/generate-cursor-rules
+```
+
+**What it does:**
+- Finds git root (typically `wp-content/` for WordPress projects)
+- Examines project structure and identifies WordPress project type
+- Discovers custom post types, taxonomies, and custom blocks
+- Checks for existing documentation in `docs/` directory
+- Identifies naming conventions and coding patterns
+- Maps technology stack (PHP, Node.js, build tools, testing)
+- Creates `.cursor/rules/` directory at git root
+- Generates 8 MDC files with project-specific context:
+  1. **00-rules-overview.mdc** - Overview and quick reference
+  2. **01-project-architecture.mdc** - Project structure (always applied)
+  3. **02-php-wordpress-standards.mdc** - PHP coding standards (*.php)
+  4. **03-custom-blocks.mdc** - Custom blocks (blocks/**/*)
+  5. **04-content-types.mdc** - Post types and taxonomies (content/**/*)
+  6. **05-development-workflow.mdc** - Git and deployment (always applied)
+  7. **06-theme-build-process.mdc** - Build commands (themes/**/*,*.scss,*.js)
+  8. **07-frontend-standards.mdc** - JS/CSS standards (*.js,*.scss,*.css)
+
+**Usage:**
+```bash
+/generate-cursor-rules
+```
+
+**Output:** 8 MDC files in `.cursor/rules/` at git root (e.g., `wp-content/.cursor/rules/`)
+
+**Key features:**
+- Links to existing `docs/` files using `mdc:` prefix
+- File-specific rules using glob patterns
+- Always-applied rules for architecture and workflow
+- Documented custom blocks, post types, and taxonomies
+- Build commands from `package.json` and `composer.json`
+
+**When to use:**
+- Setting up Cursor AI on a new project (after running `/document-project`)
+- After running `/document-project` to link rules to updated docs
+- After major refactors that change project structure
+- When onboarding teammates to use Cursor
+- To update rules with new custom blocks or post types
+
+**Important:** Always run `/document-project` first to ensure documentation exists for the rules to reference.
+
+---
 
 #### 1. `/estimate-ticket` - Code-Aware Ticket Writer
 
