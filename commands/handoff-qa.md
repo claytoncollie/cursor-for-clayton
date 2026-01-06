@@ -35,100 +35,26 @@ For each acceptance criterion from the estimate ticket:
 
 Use @file to reference relevant implementation files.
 
-### Step 3: Generate Test Steps
-
-For each acceptance criterion, create test cases:
-
-```markdown
-### Test [N]: [Test Name]
-
-**Acceptance Criterion:** [The AC being tested]
-
-**Preconditions:**
-- [Required state before testing]
-
-**Steps:**
-1. [Numbered action steps]
-2. [Be specific and detailed]
-
-**Expected Result:**
-[What should happen]
-```
-
-Organize tests by priority:
-- **Critical** - Must pass for feature to be acceptable
-- **Important** - Should pass, workarounds may exist
-- **Nice-to-have** - Test if time allows
-
-### Step 4: Document Known Limitations
-
-Capture:
-- **Expected Behaviors** - Things that might seem like bugs but are intentional
-- **Browser/Device Constraints** - Platform-specific limitations
-- **Out of Scope** - Deferred functionality not included in this release
-
 ### Step 5: Output
 
 Generate the QA handoff document following this structure:
 
 ```markdown
-# QA Handoff: [Feature Name]
-
 ## Summary
 [2-3 sentences on what was built]
-
-**Estimate Ticket:** [Link]
-
----
 
 ## Where to Test
 
 **Environment:** [URL]
-**Test Accounts:** [Username/password or reference to credential store]
-
-**Entry Points:**
-- [URL or path to access feature]
-- [Additional entry points]
-
----
 
 ## Testing Steps
 
-### Critical Tests
-
-#### Test 1: [Name]
+### Test 1: [Name]
 **AC:** [Acceptance criterion]
-**Steps:**
-1. [Step]
-2. [Step]
 **Expected:** [Result]
 
 [Continue for all critical tests]
 
-### Important Tests
-
-[Same format]
-
----
-
-## Known Limitations
-
-**Expected Behaviors (Not Bugs):**
-- [Behavior]: [Why it's intentional]
-
-**Out of Scope:**
-- [Feature]: [Deferred to future release]
-
----
-
-## Files Changed
-
-**New:** [List new files]
-**Modified:** [List modified files]
-
----
-
-**QA Handoff Prepared:** [Date]
 ```
 
 ## Output Rules
