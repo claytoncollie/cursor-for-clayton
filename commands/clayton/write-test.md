@@ -10,8 +10,8 @@ Generates unit and integration tests for WordPress theme code, targeting 100% co
 ## When to Use
 
 - After implementing features to add test coverage
-- During `/execute-plan` to test as you build
-- After `/review-code` identifies missing tests
+- During `/clayton/execute-plan` to test as you build
+- After `/clayton/review-code` identifies missing tests
 - When fixing bugs to add regression tests
 
 ## Process
@@ -152,5 +152,5 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 
 ---
 
-Next: Run `/review-code` to perform pre-push code review.
-Related: /debug-issue, /check-implementation, /handoff-qa
+Next: Run `/clayton/review-code` to perform pre-push code review.
+Related: /clayton/debug-issue, /clayton/check-implementation, /clayton/handoff-qa

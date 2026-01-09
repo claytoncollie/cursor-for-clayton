@@ -9,7 +9,7 @@ Reads a PRD or task list and works through tasks one-by-one, tracking progress, 
 
 ## When to Use
 
-- Working through a PRD created by `/plan-feature`
+- Working through a PRD created by `/clayton/plan-feature`
 - Systematic implementation of complex features
 - Tracking progress across multiple work sessions
 - Managing blockers and new tasks as they arise
@@ -127,8 +127,8 @@ At end of session, provide:
 Remind to:
 1. Update planning doc with status changes
 2. Commit completed work with descriptive messages
-3. Run `/check-implementation` to validate against design
-4. Run `/write-test` for completed features
+3. Run `/clayton/check-implementation` to validate against design
+4. Run `/clayton/write-test` for completed features
 
 ## Communication Guidelines
 
@@ -157,5 +157,5 @@ Status updates and session summaries must be IMMEDIATELY COPY-PASTEABLE.
 
 ---
 
-Next: Run `/check-implementation` to validate against the plan.
-Related: `/plan-feature`, `/debug-issue`, `/review-code`
+Next: Run `/clayton/check-implementation` to validate against the plan.
+Related: `/clayton/plan-feature`, `/clayton/debug-issue`, `/clayton/review-code`

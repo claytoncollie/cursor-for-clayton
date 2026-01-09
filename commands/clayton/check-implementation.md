@@ -137,5 +137,5 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 
 ---
 
-Next: Run `/write-test` to generate tests for your implementation.
-Related: /write-test, /review-code, /debug-issue
+Next: Run `/clayton/write-test` to generate tests for your implementation.
+Related: /clayton/write-test, /clayton/review-code, /clayton/debug-issue

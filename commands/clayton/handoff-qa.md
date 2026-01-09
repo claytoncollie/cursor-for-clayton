@@ -72,4 +72,4 @@ The output must be IMMEDIATELY COPY-PASTEABLE into Teamwork.
 ---
 
 Next: Paste into Teamwork and move ticket to "Ready for QA".
-Related: `/review-code`, `/write-test`, `/debug-issue`
+Related: `/clayton/review-code`, `/clayton/write-test`, `/clayton/debug-issue`

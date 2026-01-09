@@ -168,5 +168,5 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 
 ---
 
-Next: Run `/handoff-qa` to generate QA documentation.
-Related: /check-implementation, /write-test, /handoff-qa
+Next: Run `/clayton/handoff-qa` to generate QA documentation.
+Related: /clayton/check-implementation, /clayton/write-test, /clayton/handoff-qa

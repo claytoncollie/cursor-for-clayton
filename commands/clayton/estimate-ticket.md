@@ -109,5 +109,5 @@ The ticket must be IMMEDIATELY COPY-PASTEABLE into Teamwork.
 
 ---
 
-Next: Run `/plan-feature` for complex features needing detailed PRDs.
-Related: `/execute-plan`, `/check-implementation`
+Next: Run `/clayton/plan-feature` for complex features needing detailed PRDs.
+Related: `/clayton/execute-plan`, `/clayton/check-implementation`

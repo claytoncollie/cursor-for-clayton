@@ -19,7 +19,7 @@ Use @file to reference the target file directly.
 ## Usage
 
 ```bash
-/document-file [filepath]
+/clayton/document-file [filepath]
 ```
 
 ## Process
@@ -135,4 +135,3 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 ---
 
 This is a standalone utility command. Use anytime you need to document PHP files.
-Related: /document-project

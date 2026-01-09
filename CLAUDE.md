@@ -9,33 +9,33 @@ This is a Cursor AI configuration repository containing reusable slash commands 
 ## Structure
 
 ```
-commands/           # Slash command definitions (markdown files)
-rules/              # Global AI rules
+commands/
+  clayton/            # Clayton's personal slash commands (namespaced)
+rules/
   cursor-global-rules.md  # Development guidelines for Cursor Settings → Rules for AI
 ```
 
 ## Slash Commands
 
-Commands follow a structured engineering workflow:
+Commands are namespaced under `clayton/` and follow a structured engineering workflow:
 
 **Planning Phase:**
-1. `/estimate-ticket` - Create engineering tickets for Teamwork (analyzes codebase first)
-2. `/plan-feature` - Create PRD documents for complex features
-3. `/execute-plan` - Work through PRD tasks interactively
+1. `/clayton/estimate-ticket` - Create engineering tickets for Teamwork (analyzes codebase first)
+2. `/clayton/plan-feature` - Create PRD documents for complex features
+3. `/clayton/execute-plan` - Work through PRD tasks interactively
 
 **Implementation Phase:**
-4. `/check-implementation` - Validate code against PRD/estimate
-5. `/debug-issue` - Structured debugging workflow
-6. `/write-test` - Generate tests targeting 100% coverage
+4. `/clayton/check-implementation` - Validate code against PRD/estimate
+5. `/clayton/debug-issue` - Structured debugging workflow
+6. `/clayton/write-test` - Generate tests targeting 100% coverage
 
 **Review Phase:**
-7. `/review-code` - Pre-push code review
-8. `/handoff-qa` - Generate QA documentation for Teamwork
+7. `/clayton/review-code` - Pre-push code review
+8. `/clayton/handoff-qa` - Generate QA documentation for Teamwork
 
-**Configuration:**
-- `/generate-cursor-rules` - Generate project-specific `.cursor/rules/` MDC files
-- `/document-file` - Generate PHP DocBlocks for individual files
-- `/document-project` - Project-wide documentation generation
+**Utilities:**
+- `/clayton/init-wordpress` - Initialize WordPress project with docs, rules, and AGENTS.md
+- `/clayton/document-file` - Generate PHP DocBlocks for individual files
 
 ## Setup
 

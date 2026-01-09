@@ -1,9 +1,6 @@
 ---
 name: Initialize WordPress
 description: Initialize WordPress project with docs, rules, and AGENTS.md
-author: Clayton Collie
-version: 1.0.0
-tags: [wordpress, initialization, documentation, cursor-rules, agents]
 ---
 
 # Initialize WordPress Project
@@ -55,6 +52,16 @@ Scan the codebase to discover:
 - Check for legacy `.mdc` files
 - Check for legacy `.cursorrules` file
 
+**Existing Documentation Deep Scan:**
+If `docs/` exists, read each markdown file and extract:
+- Document title and purpose
+- Key content sections and topics covered
+- Information that should be preserved or updated
+- Outdated information that conflicts with discovered codebase state
+- Links that need updating
+
+This content informs Phase 4 edits and rule file links.
+
 ### Phase 2: Analysis
 
 Present findings in this format:
@@ -94,9 +101,15 @@ Will create:
 📁 Existing Configuration:
 
    docs/ ({count} files)
-   ├── ✓ {file} - {status}
-   ├── ⚠ {file} - {issue}
+   ├── ✓ {file} - current, no changes needed
+   ├── ⚠ {file} - needs update: {specific issue}
+   ├── 📝 {file} - will merge new discoveries
    └── ✗ Missing: {files}
+
+   📖 Docs Content Analysis:
+   {For each existing doc file, summarize:}
+   ├── {file}: {topics covered}, {update needed: yes/no}
+   └── Links to add to rules: {list doc paths}
 
    .cursor/rules/ ({count} folders)
    ├── ✓ {folder}/ - {status}
@@ -193,11 +206,29 @@ See [docs/README.md](docs/README.md) for full documentation.
 
 | Folder | Frontmatter | Content |
 |--------|-------------|---------|
-| project-context/ | `alwaysApply: true` | Project structure, tech stack, key components, doc links |
+| project-context/ | `alwaysApply: true` | Project structure, tech stack, key components, **full documentation index** |
 | development-workflow/ | `alwaysApply: true` | Commands from package.json/composer.json, git workflow, code quality |
 | php-standards/ | `globs: *.php` | Namespace, naming conventions, security patterns, performance |
 | wordpress-components/ | `globs: blocks/**/*,includes/blocks/**/*,inc/post-types/**/*,inc/taxonomies/**/*` | Blocks list with structure, post types, taxonomies, custom fields |
 | frontend-standards/ | `globs: *.js,*.ts,*.jsx,*.tsx,*.scss,*.css` | No jQuery rule, ES6+ patterns, CSS methodology, build process |
+
+**CRITICAL: project-context/RULE.md must include a Documentation section:**
+
+```markdown
+## Documentation
+
+Reference these docs for detailed context:
+
+- [Project Overview](../../docs/project-overview.md) - {brief description}
+- [Architecture](../../docs/architecture.md) - {brief description}
+- [Development Workflow](../../docs/development-workflow.md) - {brief description}
+- [Content Types](../../docs/content-types.md) - {brief description}
+- [Block Editor](../../docs/block-editor.md) - {brief description}
+- [Environments](../../docs/environments.md) - {brief description}
+{...list ALL docs files that exist or are created}
+```
+
+This ensures the AI always knows about and references project documentation.
 
 **3. docs/** (8-12 markdown files)
 
@@ -216,6 +247,26 @@ See [docs/README.md](docs/README.md) for full documentation.
 | block-editor.md | Custom blocks, patterns (WordPress) |
 | themes.md | Theme structure (WordPress) |
 
+**CRITICAL: Handling Existing docs/ Files**
+
+If `docs/` already exists, DO NOT skip it. For each file:
+
+1. **Read the existing content entirely**
+2. **Compare with discoveries from Phase 1**
+3. **Preserve** - Keep existing content that is accurate and valuable
+4. **Update** - Modify outdated information (versions, counts, file paths)
+5. **Merge** - Add new discoveries not yet documented
+6. **Remove** - Delete references to components that no longer exist
+
+Show these as modifications in Phase 3 diff preview, not new files.
+
+**Examples of updates to make:**
+- Block count changed: "5 custom blocks" → "8 custom blocks"
+- New post type discovered: Add to content-types.md
+- Build command changed: Update development-workflow.md
+- New integration added: Update integrations.md
+- Architecture evolved: Update architecture.md diagrams
+
 **4. Delete legacy files**
 
 - `.cursor/rules/*.mdc` → content migrated to folder structure
@@ -227,16 +278,18 @@ See [docs/README.md](docs/README.md) for full documentation.
 ✅ Changes applied successfully!
 
 Created:
-   • AGENTS.md
+   • AGENTS.md (if new)
    • .cursor/rules/project-context/RULE.md
    • .cursor/rules/development-workflow/RULE.md
    • .cursor/rules/php-standards/RULE.md
    • .cursor/rules/wordpress-components/RULE.md
    • .cursor/rules/frontend-standards/RULE.md
-   • docs/{files created}
+   • docs/{new files only}
 
 Modified:
-   • {files modified}
+   • AGENTS.md (if existed)
+   • docs/{existing files updated}
+   • .cursor/rules/{existing rules updated}
 
 Deleted:
    • {legacy files} (migrated)
@@ -245,7 +298,12 @@ Deleted:
    • {count} custom blocks documented
    • {count} post types documented
    • {count} taxonomies documented
+   • {count} docs files linked in rules
    • Build commands updated
+
+📖 Documentation Linked:
+   • All docs referenced in .cursor/rules/project-context/RULE.md
+   • Cross-references updated in AGENTS.md
 
 💡 Next steps:
    git add AGENTS.md .cursor docs
@@ -269,14 +327,12 @@ Deleted:
 4. No preambles ("Here's what I found...")
 5. No unnecessary commentary
 6. Clean, scannable format throughout
+7. **NEVER skip existing docs/ files** - always read, analyze, and update them
+8. **ALWAYS link docs in rules** - project-context/RULE.md must reference all docs
+9. Existing content takes priority - preserve valuable documentation, update only what's outdated
 
 ## Legacy Migration
 
 **`.mdc` files:** Read content, create equivalent folder with RULE.md, delete after approval.
 
 **`.cursorrules`:** Read content, merge into AGENTS.md, delete after approval.
-
----
-
-**Version**: 1.0.0
-**Replaces**: `/document-project`, `/generate-cursor-rules`

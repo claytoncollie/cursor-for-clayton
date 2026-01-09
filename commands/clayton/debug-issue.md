@@ -163,5 +163,5 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 
 ---
 
-After fixing: Run `/write-test` to add regression tests, then `/check-implementation` to verify.
-Related: /check-implementation, /write-test, /review-code
+After fixing: Run `/clayton/write-test` to add regression tests, then `/clayton/check-implementation` to verify.
+Related: /clayton/check-implementation, /clayton/write-test, /clayton/review-code
