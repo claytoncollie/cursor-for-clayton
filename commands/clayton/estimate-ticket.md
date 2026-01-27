@@ -5,7 +5,7 @@ description: Code-aware ticket writer that analyzes codebase patterns before cre
 
 # Estimate Ticket
 
-Creates structured engineering tickets for Teamwork by first analyzing your codebase to understand existing patterns, components, and conventions.
+Creates Teamwork tickets after analyzing codebase patterns and conventions.
 
 ## When to Use
 
@@ -110,4 +110,3 @@ The ticket must be IMMEDIATELY COPY-PASTEABLE into Teamwork.
 ---
 
 Next: Run `/clayton/plan-feature` for complex features needing detailed PRDs.
-Related: `/clayton/execute-plan`, `/clayton/check-implementation`

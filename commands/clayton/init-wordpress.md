@@ -5,6 +5,8 @@ description: Initialize WordPress project with docs, rules, and AGENTS.md
 
 # Initialize WordPress Project
 
+Keep output concise. Avoid verbose explanations.
+
 Single command that initializes a WordPress project for AI-assisted development by generating documentation, Cursor rules, and agent instructions.
 
 ## Process Flow
@@ -328,8 +330,7 @@ Deleted:
 5. No unnecessary commentary
 6. Clean, scannable format throughout
 7. **NEVER skip existing docs/ files** - always read, analyze, and update them
-8. **ALWAYS link docs in rules** - project-context/RULE.md must reference all docs
-9. Existing content takes priority - preserve valuable documentation, update only what's outdated
+8. Existing content takes priority - preserve valuable documentation, update only what's outdated
 
 ## Legacy Migration
 

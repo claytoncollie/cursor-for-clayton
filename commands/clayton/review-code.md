@@ -5,7 +5,7 @@ description: Pre-push code review for WordPress theme development
 
 # Review Code
 
-Performs thorough local code review before pushing changes. Catches issues early, validates against design docs, and ensures code quality.
+Pre-push code review. Validates against design docs, catches issues early.
 
 ## When to Use
 
@@ -169,4 +169,3 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 ---
 
 Next: Run `/clayton/handoff-qa` to generate QA documentation.
-Related: /clayton/check-implementation, /clayton/write-test, /clayton/handoff-qa

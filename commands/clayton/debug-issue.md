@@ -5,7 +5,7 @@ description: Structured debugging assistant for WordPress theme development
 
 # Debug Issue
 
-Helps debug issues by clarifying expectations, identifying gaps, and agreeing on a fix plan before changing code. Takes a structured approach to isolate problems and surface resolution options.
+Structured debugging: clarify expectations, isolate problems, agree on fix before changing code.
 
 Use Cursor's Debug Mode (Cmd+Shift+D) for runtime debugging with automatic logging instrumentation.
 
@@ -164,4 +164,3 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 ---
 
 After fixing: Run `/clayton/write-test` to add regression tests, then `/clayton/check-implementation` to verify.
-Related: /clayton/check-implementation, /clayton/write-test, /clayton/review-code

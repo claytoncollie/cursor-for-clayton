@@ -5,7 +5,7 @@ description: Create Product Requirements Documents (PRD) for feature planning
 
 # Plan Feature
 
-Creates comprehensive PRDs for features requiring detailed planning. The PRD serves as the source of truth for `/clayton/execute-plan`.
+Creates PRDs for complex features. Source of truth for `/clayton/execute-plan`.
 
 ## When to Use
 
@@ -163,4 +163,3 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 ---
 
 Next: Run `/clayton/execute-plan` to work through tasks interactively.
-Related: /clayton/execute-plan, /clayton/check-implementation

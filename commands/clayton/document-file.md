@@ -5,7 +5,7 @@ description: Generate PHP DocBlocks for undocumented files with smart preservati
 
 # Document File
 
-Analyzes PHP files to generate intelligent DocBlocks for files, classes, and methods missing documentation. Preserves existing documentation while adding new DocBlocks where needed.
+Generates DocBlocks for undocumented PHP files, classes, and methods. Preserves existing docs.
 
 Use @file to reference the target file directly.
 

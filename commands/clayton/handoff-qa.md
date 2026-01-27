@@ -5,7 +5,7 @@ description: Validates acceptance criteria and generates QA documentation for Te
 
 # Handoff QA
 
-Verifies acceptance criteria from the estimate ticket are met and generates comprehensive QA handoff documentation ready to paste into Teamwork.
+Validates acceptance criteria and generates QA handoff for Teamwork.
 
 ## When to Use
 
@@ -72,4 +72,3 @@ The output must be IMMEDIATELY COPY-PASTEABLE into Teamwork.
 ---
 
 Next: Paste into Teamwork and move ticket to "Ready for QA".
-Related: `/clayton/review-code`, `/clayton/write-test`, `/clayton/debug-issue`

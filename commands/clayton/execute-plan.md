@@ -5,7 +5,7 @@ description: Works through PRD tasks interactively, tracking progress and blocke
 
 # Execute Plan
 
-Reads a PRD or task list and works through tasks one-by-one, tracking progress, blockers, and newly discovered work.
+Works through PRD tasks, tracking progress and blockers.
 
 ## When to Use
 
@@ -158,4 +158,3 @@ Status updates and session summaries must be IMMEDIATELY COPY-PASTEABLE.
 ---
 
 Next: Run `/clayton/check-implementation` to validate against the plan.
-Related: `/clayton/plan-feature`, `/clayton/debug-issue`, `/clayton/review-code`

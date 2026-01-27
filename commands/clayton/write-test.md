@@ -5,7 +5,7 @@ description: Test generator targeting 100% code coverage for WordPress theme dev
 
 # Write Test
 
-Generates unit and integration tests for WordPress theme code, targeting 100% coverage. Aligns test cases with acceptance criteria from estimate tickets.
+Generates unit/integration tests targeting 100% coverage, aligned to acceptance criteria.
 
 ## When to Use
 
@@ -35,40 +35,16 @@ From requirements and design docs:
 
 ### Step 3: Write Unit Tests
 
-For each function, create tests covering:
+For each function, create tests covering happy path, edge cases, error handling, and input validation:
 
-**Happy Path** - Standard expected behavior:
 ```php
-public function test_carousel_displays_selected_event_count() {
+public function test_carousel_displays_correct_count() {
     $events = $this->factory->post->create_many(10, ['post_type' => 'event']);
-    $output = render_carousel(['posts_per_page' => 5]);
-    $this->assertCount(5, $this->extract_event_cards($output));
+    $this->assertCount(5, $this->extract_event_cards(render_carousel(['posts_per_page' => 5])));
 }
-```
 
-**Edge Cases** - Boundary conditions:
-```php
-public function test_carousel_with_no_events_shows_empty_state() {
-    $output = render_carousel(['posts_per_page' => 10]);
-    $this->assertStringContainsString('No events found', $output);
-}
-```
-
-**Error Handling** - Graceful failures:
-```php
-public function test_carousel_handles_event_without_featured_image() {
-    $event = $this->factory->post->create(['post_type' => 'event']);
-    $output = render_carousel(['post__in' => [$event]]);
-    $this->assertStringContainsString('fallback-image.jpg', $output);
-}
-```
-
-**Input Validation** - Various input types:
-```php
-public function test_carousel_validates_posts_per_page() {
-    $this->assertEquals(10, validate_posts_per_page(-5));
-    $this->assertEquals(10, validate_posts_per_page(0));
-    $this->assertEquals(5, validate_posts_per_page(5));
+public function test_carousel_empty_state() {
+    $this->assertStringContainsString('No events found', render_carousel([]));
 }
 ```
 
@@ -153,4 +129,3 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 ---
 
 Next: Run `/clayton/review-code` to perform pre-push code review.
-Related: /clayton/debug-issue, /clayton/check-implementation, /clayton/handoff-qa

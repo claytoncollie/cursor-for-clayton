@@ -5,7 +5,7 @@ description: Validate code against PRD and estimate ticket
 
 # Check Implementation
 
-Compares your implementation against the design doc (PRD) and estimate ticket to ensure code matches the planned approach and satisfies requirements.
+Validates implementation against PRD and estimate ticket.
 
 ## When to Use
 
@@ -18,8 +18,6 @@ Compares your implementation against the design doc (PRD) and estimate ticket to
 ## Process
 
 ### Step 1: Gather Context
-
-I'll ask you for:
 
 - **Feature description**: Brief summary of what was built
 - **Modified files**: New, modified, deleted files
@@ -138,4 +136,3 @@ The output must be IMMEDIATELY COPY-PASTEABLE without removing surrounding text.
 ---
 
 Next: Run `/clayton/write-test` to generate tests for your implementation.
-Related: /clayton/write-test, /clayton/review-code, /clayton/debug-issue
