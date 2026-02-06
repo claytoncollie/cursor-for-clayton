@@ -7,15 +7,9 @@ description: Code-aware ticket writer that analyzes codebase patterns before cre
 
 Creates Teamwork tickets after analyzing codebase patterns and conventions.
 
-## When to Use
+<process>
 
-- Starting new feature work that needs a Teamwork ticket
-- Creating tickets that reference existing codebase patterns
-- Estimating work that involves WordPress theme components
-
-## Process
-
-### Step 1: Gather Context
+## Step 1: Gather Context
 
 Ask for:
 1. **Feature Description** - What are we building or changing?
@@ -24,18 +18,30 @@ Ask for:
 4. **Design Links** - Mockups, Figma files (if available)
 5. **Additional Context** - Related tickets, dependencies, constraints
 
-### Step 2: Analyze Codebase
+## Step 2: Analyze Codebase
 
-Use @codebase to examine relevant code before writing the ticket:
-
+Examine relevant code before writing the ticket:
 - **Existing Components** - Blocks, templates, partials that can be reused
 - **Naming Conventions** - Block names, CSS classes, function prefixes
 - **Similar Implementations** - How comparable features are built
 - **Data Patterns** - Post meta, taxonomies, ACF fields, query patterns
 
-### Step 3: Write Ticket
+## Step 3: Write Ticket
 
-Generate the ticket following this exact structure:
+Generate the ticket using the output format below.
+
+## Step 4: Output
+
+Provide:
+1. **Brief Summary** (3-5 bullets) highlighting:
+   - Existing components identified for reuse
+   - New work required
+   - Key files to modify/create
+2. **Formatted Ticket** - Ready to paste into Teamwork
+
+</process>
+
+<output_format>
 
 ```markdown
 ## Title
@@ -85,28 +91,17 @@ FE: [hours] - UI, styling, JavaScript
 BE: [hours] - Data structure, registration, server logic
 ```
 
-### Step 4: Output
+</output_format>
 
-Provide:
-1. **Brief Summary** (3-5 bullets) highlighting:
-   - Existing components identified for reuse
-   - New work required
-   - Key files to modify/create
-
-2. **Formatted Ticket** - Ready to paste into Teamwork
-
-## Output Rules
-
-CRITICAL: Follow these rules exactly.
-
-1. Output ONLY the Summary and Formatted Ticket
-2. Do NOT add introductions ("Here's the ticket...", "I've prepared...")
-3. Do NOT add explanations after the ticket
-4. Do NOT add meta-commentary about what you produced
-5. The formatted output IS your complete response
-
-The ticket must be IMMEDIATELY COPY-PASTEABLE into Teamwork.
+<output_rules>
+- Output ONLY the Summary and Formatted Ticket
+- Do NOT add introductions ("Here's the ticket...", "I've prepared...")
+- Do NOT add explanations after the ticket
+- Do NOT add meta-commentary about what you produced
+- The formatted output IS your complete response
+- The ticket must be IMMEDIATELY COPY-PASTEABLE into Teamwork
+</output_rules>
 
 ---
 
-Next: Run `/clayton/plan-feature` for complex features needing detailed PRDs.
+Next: Run `/clayton/execute-plan` to work through tasks interactively.

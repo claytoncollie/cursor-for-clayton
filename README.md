@@ -1,30 +1,42 @@
-# Cursor Configuration Repository
+# Claude Code Configuration Repository
 
-A centralized repository for custom Cursor AI commands and rules that can be symlinked into your global `.cursor` directory.
+A centralized repository for Claude Code global rules, settings, and custom commands. Supports multiple Claude Code profiles on the same machine via symlinks — edit once, apply everywhere.
 
 ## What's Included
 
+### Global Rules
+
+`rules/claude-global-rules.md` — Expert software engineering partner persona and development guidelines. Symlinked as `CLAUDE.md` into each profile so it applies to all projects.
+
+### Global Settings
+
+`settings.json` — Claude Code permissions (allow/deny lists for tools, file access, and bash commands). Symlinked into each profile.
+
 ### Commands
 
-Commands are namespaced under `commands/clayton/` and follow a structured engineering workflow:
+Commands are namespaced under `commands/clayton/` and cover Teamwork-specific workflows that Claude Code doesn't handle natively:
 
-**Workflow Commands:**
 - **estimate-ticket** - Create engineering tickets for Teamwork (analyzes codebase first)
-- **plan-feature** - Create PRD documents for complex features
-- **execute-plan** - Work through PRD tasks interactively
-- **check-implementation** - Validate code against PRD/estimate
-- **debug-issue** - Structured debugging workflow
-- **write-test** - Generate tests targeting 100% coverage
-- **review-code** - Pre-push code review
+- **execute-plan** - Work through PRD tasks interactively with progress tracking
 - **handoff-qa** - Generate QA documentation for Teamwork
+- **init-wordpress** - Initialize WordPress project with docs, rules, and CLAUDE.md
 
-**Utilities:**
-- **init-wordpress** - Initialize WordPress project with docs, rules, and AGENTS.md
-- **document-file** - Generate PHP DocBlocks for individual files
+Commands that Claude Code handles natively (planning, debugging, testing, code review, documentation) have been removed in favor of built-in capabilities.
 
-### Rules
+### Setup Script
 
-Global development guidelines in `rules/cursor-global-rules.md` covering development approach, code quality standards, and best practices.
+`setup.sh` — One-command installer that symlinks everything into all profiles.
+
+## Profiles
+
+Two Claude Code profiles are supported on the same machine:
+
+| Profile | Directory | Purpose |
+|---------|-----------|---------|
+| Personal | `~/.claude/` | Personal projects |
+| Work | `~/.claude-work/` | Work projects |
+
+Both profiles receive identical rules, settings, and commands. Edit the files in this repo and both profiles update instantly.
 
 ## Setup
 
@@ -34,32 +46,56 @@ Global development guidelines in `rules/cursor-global-rules.md` covering develop
 git clone git@github.com:claytoncollie/cursor-for-clayton.git ~/www/cursor-for-clayton
 ```
 
-### 2. Symlink Commands
+### 2. Run the Setup Script
 
 ```bash
-ln -s ~/www/cursor-for-clayton/commands ~/.cursor/commands
+cd ~/www/cursor-for-clayton && bash setup.sh
 ```
 
-### 3. Setup Rules
-
-Copy the contents of `rules/cursor-global-rules.md` into Cursor Settings → General → Rules for AI.
-
-### 4. Restart Cursor
-
-Restart the editor to load the new commands.
-
-## Workflow Order
+This creates symlinks in one shot:
 
 ```
-1. /estimate-ticket     → Create engineering ticket
-2. /plan-feature        → Create detailed PRD (optional)
-3. /execute-plan        → Implement tasks from PRD
-4. /check-implementation → Validate code against design
-5. /write-test          → Generate tests for coverage
-6. /review-code         → Pre-push code review
-7. /handoff-qa          → Generate QA documentation
-8. /debug-issue         → Use anytime issues arise
+~/.claude/CLAUDE.md          → rules/claude-global-rules.md
+~/.claude/settings.json      → settings.json
+~/.claude/commands/clayton/  → commands/clayton/
+~/.claude-work/CLAUDE.md          → rules/claude-global-rules.md
+~/.claude-work/settings.json      → settings.json
+~/.claude-work/commands/clayton/  → commands/clayton/
+~/.cursor/commands                → commands/
 ```
+
+The script is safe to run multiple times — it removes stale symlinks before creating new ones.
+
+### Manual Setup (Alternative)
+
+If you prefer to set up manually:
+
+```bash
+# Personal profile
+ln -sf ~/www/cursor-for-clayton/rules/claude-global-rules.md ~/.claude/CLAUDE.md
+ln -sf ~/www/cursor-for-clayton/settings.json ~/.claude/settings.json
+mkdir -p ~/.claude/commands
+ln -sf ~/www/cursor-for-clayton/commands/clayton ~/.claude/commands/clayton
+
+# Work profile
+mkdir -p ~/.claude-work/commands
+ln -sf ~/www/cursor-for-clayton/rules/claude-global-rules.md ~/.claude-work/CLAUDE.md
+ln -sf ~/www/cursor-for-clayton/settings.json ~/.claude-work/settings.json
+ln -sf ~/www/cursor-for-clayton/commands/clayton ~/.claude-work/commands/clayton
+
+# Cursor IDE (optional)
+ln -sf ~/www/cursor-for-clayton/commands ~/.cursor/commands
+```
+
+## Workflow
+
+```
+1. /estimate-ticket  → Create engineering ticket for Teamwork
+2. /execute-plan     → Work through tasks with progress tracking
+3. /handoff-qa       → Generate QA documentation for Teamwork
+```
+
+`/init-wordpress` is a one-time setup command for new WordPress projects.
 
 ## WordPress Focus
 
@@ -71,17 +107,20 @@ All commands are designed with WordPress theme development awareness:
 
 ## Updating
 
-Changes to commands are immediately available via the symlink. After pulling updates, manually copy updated rules into Cursor Settings.
+Changes are immediately available via symlinks. Pull updates and both profiles get them automatically.
 
 ```bash
 cd ~/www/cursor-for-clayton && git pull origin trunk
 ```
 
+To add the symlinks on a new machine, just clone and run `setup.sh` again.
+
 ## Troubleshooting
 
-If the commands symlink already exists, remove and recreate it:
+If symlinks are broken or stale, re-run the setup script:
 
 ```bash
-rm -rf ~/.cursor/commands
-ln -s ~/www/cursor-for-clayton/commands ~/.cursor/commands
+cd ~/www/cursor-for-clayton && bash setup.sh
 ```
+
+This is safe to run repeatedly — it cleans up old symlinks before creating new ones.
