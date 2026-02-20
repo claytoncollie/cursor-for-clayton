@@ -32,7 +32,20 @@
       "Bash(composer *)",
       "Bash(php *)",
       "Bash(wp *)",
-      "Bash(sleep *)"
+      "Bash(sleep *)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:packagist.org)",
+      "WebFetch(domain:developer.wordpress.org)",
+      "WebFetch(domain:developer.mozilla.org)",
+      "Bash(gh *)",
+      "Bash(glab *)",
+      "Bash(nvm *)",
+      "Bash(source *)",
+      "Bash(for *)",
+      "Bash(do *)",
+      "Bash(done)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -96,10 +109,8 @@
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
     "php-lsp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
