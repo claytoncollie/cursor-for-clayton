@@ -17,22 +17,16 @@ Generates a QA handoff document for Teamwork with a summary of changes and accep
 <output_format>
 
 ```markdown
-## Summary
+[Single paragraph describing what was built/changed, why, and where to test. Include the environment URL inline.]
 
-[2-3 sentences describing what changed and why]
+**Acceptance Criteria:**
 
-## Where to Test
-
-**Environment:** [URL]
-
-## Acceptance Criteria
-
-- [ ] [Specific, testable behavior]
-- [ ] [Visibility/display conditions]
-- [ ] [Data source verification]
-- [ ] [Editor controls work as intended]
-- [ ] [Responsive behavior]
-- [ ] [Accessibility requirements]
+- [Specific, testable behavior]
+- [Visibility/display conditions]
+- [Data source verification]
+- [Editor controls work as intended]
+- [Responsive behavior]
+- [Accessibility requirements]
 ```
 
 </output_format>

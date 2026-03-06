@@ -76,12 +76,12 @@ Provide:
 
 ## Acceptance Criteria
 
-- [ ] [Specific, testable behavior]
-- [ ] [Visibility/display conditions]
-- [ ] [Data source verification]
-- [ ] [Editor controls work as intended]
-- [ ] [Responsive behavior]
-- [ ] [Accessibility requirements]
+- [Specific, testable behavior]
+- [Visibility/display conditions]
+- [Data source verification]
+- [Editor controls work as intended]
+- [Responsive behavior]
+- [Accessibility requirements]
 
 ---
 

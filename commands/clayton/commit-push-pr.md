@@ -82,12 +82,27 @@ EOF
 - If the repo is GitLab but `glab` is not installed, push first then tell the user to open the "Create merge request" link GitLab prints, or install [glab](https://gitlab.com/gitlab-org/cli)
 - Return the PR/MR URL to the user when done
 
+## 5. Watch CI pipeline
+
+- After the PR/MR is created, monitor CI check status:
+  - **GitHub:** `gh pr checks <pr-number> --watch`
+  - **GitLab:** `glab ci status --live`
+- If a CI check fails:
+  1. Read the failure logs (`gh run view <run-id> --log-failed` or `glab ci trace`)
+  2. Identify the root cause (lint error, test failure, type error)
+  3. Fix the issue locally
+  4. Stage, commit (new commit — never amend), and push
+  5. Resume watching checks
+- Give up after 3 fix attempts — report remaining failures to the user with log excerpts
+- Once all checks pass, report the green status and PR/MR URL
+
 </process>
 
 <output_rules>
 - Return the PR or MR URL to the user when it is created
 - Warn the user if any modified files look like secrets; do not stage them
 - Never amend after a failed pre-commit hook — fix, re-stage, and create a new commit
+- Report CI check results after pipeline completes (pass or fail)
 </output_rules>
 
 <error_handling>
@@ -95,6 +110,7 @@ EOF
 - If push fails (e.g. no upstream, auth): report the error and suggest next steps (e.g. `gh auth status` or `glab auth status`, set remote)
 - If GitHub and `gh pr create` fails: report the error and suggest checking `gh pr create --help` or repo PR settings
 - If GitLab and `glab mr create` fails: report the error; if `glab` is missing, suggest installing the GitLab CLI or using the "Create merge request" link after push
+- If CI checks fail after 3 fix attempts: stop, report the failures with log excerpts, and suggest manual investigation
 </error_handling>
 
 ---

@@ -1,300 +1,83 @@
 ---
 name: Initialize WordPress
-description: Initialize WordPress project with docs, rules, and CLAUDE.md
+description: Initialize WordPress project with a lean CLAUDE.md and migrate legacy config files
 ---
 
 # Initialize WordPress Project
 
-Single command that initializes a WordPress project for AI-assisted development by generating documentation, Cursor rules, and CLAUDE.md.
+Generates a lean CLAUDE.md with only information the agent can't discover on its own. Migrates legacy Cursor config files if present.
 
-Execute these 5 phases in order.
+<process>
 
-<phase_1_discovery>
+## 1. Check for legacy files
 
-Scan the codebase to discover:
+Scan for files that need migration:
+- `.cursorrules` in project root
+- `.cursor/rules/*.mdc` files
 
-**Project Identification:**
-- Project name from `package.json`, `composer.json`, or directory name
-- Git root location via `git rev-parse --show-toplevel`
-- Theme/plugin directory paths
+If found, read their contents for migration in step 4.
 
-**Tech Stack:**
-- PHP version from `composer.json`
-- Node version from `.nvmrc` or `package.json` engines
-- Build tool: webpack, gulp, 10up-toolkit, vite
-- Package manager: npm, yarn, pnpm
-- CSS preprocessor: sass, postcss, less
-- Testing tools: PHPUnit, Jest, Cypress
-- Code quality: PHPCS, ESLint, Stylelint
+## 2. Discover project basics
 
-**WordPress Components:**
-- Custom blocks: scan `blocks/`, `includes/blocks/` for `block.json` files
-- Custom post types: grep for `register_post_type` calls
-- Taxonomies: grep for `register_taxonomy` calls
-- Custom fields: detect ACF, Field Manager, or meta boxes
+From code, determine:
+- **Project name** from `package.json`, `composer.json`, or directory name
+- **Type** — theme or plugin (from directory structure)
 
-**Naming Conventions:**
-- PHP namespace from class files
-- Function/constant prefix from `functions.php`
-- Block namespace from `block.json` files
-- CSS methodology from class naming patterns
+Confirm findings with the user.
 
-**Build Commands:**
-- Extract scripts from `package.json`
-- Extract scripts from `composer.json`
+## 3. Ask the user for undiscoverable info
 
-**Existing Configuration:**
-- Check for `docs/` directory and contents
-- Check for `.cursor/rules/` directory and contents
-- Check for `CLAUDE.md`
-- Check for legacy `.mdc` files
-- Check for legacy `.cursorrules` file
+The agent can grep for blocks, post types, build commands, namespaces, etc. It cannot discover:
 
-**Existing Documentation Deep Scan:**
-If `docs/` exists, read each markdown file and extract:
-- Document title and purpose
-- Key content sections and topics covered
-- Information that should be preserved or updated
-- Outdated information that conflicts with discovered codebase state
-- Links that need updating
+1. **Environment URLs** — local dev, staging, production
+2. **Team workflows** — deployment tool (e.g., Buddy, DeployHQ), branching strategy, PR review process
+3. **Tribal knowledge** — conventions not in code (e.g., "use ACF for custom fields", "never modify mu-plugins directly", "CSS changes need design review")
 
-This content informs Phase 4 edits and rule file links.
+Ask for all three. Skip any the user doesn't have.
 
-</phase_1_discovery>
+## 4. Generate CLAUDE.md
 
-<phase_2_analysis>
-
-Present findings in this format:
-
-```
-Analyzing project...
-
-Project: {name}
-Type: WordPress {Theme|Plugin}
-
-Tech Stack:
-  - PHP {version}, Node {version}
-  - Build: {tool}
-  - Quality: {tools}
-
-WordPress Components:
-  - {count} custom blocks ({list first 3}...)
-  - {count} post types ({slugs})
-  - {count} taxonomies ({slugs})
-  - Custom fields: {ACF|Field Manager|None}
-
-Conventions:
-  - Namespace: {Namespace}\
-  - Prefix: {prefix}-
-  - CSS: {methodology}
-
-{If fresh project:}
-No existing configuration found.
-
-Will create:
-  - CLAUDE.md
-  - .cursor/rules/ (5 rule folders)
-  - docs/ ({count} markdown files)
-
-{If existing setup:}
-Existing Configuration:
-
-  docs/ ({count} files)
-  - {file} - current, no changes needed
-  - {file} - needs update: {specific issue}
-  - {file} - will merge new discoveries
-  - Missing: {files}
-
-  .cursor/rules/ ({count} folders)
-  - {folder}/ - {status}
-  - Missing: {folders}
-
-  CLAUDE.md - {status}
-
-  {If legacy files:}
-  Legacy files to migrate:
-  - {file} -> {destination}
-
-Will:
-  - Create {count} new files
-  - Modify {count} existing files
-  - Delete {count} legacy files
-```
-
-</phase_2_analysis>
-
-<phase_3_diff_preview>
-
-For each file that will be created or modified, show unified diff:
-
-```
----
-{path} ({new file|modified})
----
-
-{Show unified diff with @@ line markers}
-{For new files, show all lines as additions (+)}
-{For modifications, show context with -/+ changes}
-
----
-{legacy file} (delete - migrated to {destination})
----
-
-Summary:
-  - {count} files modified
-  - {count} files created
-  - {count} files deleted
-
-Apply changes? [Y/n]
-```
-
-Wait for user confirmation before proceeding.
-
-</phase_3_diff_preview>
-
-<phase_4_generation>
-
-After user approves, create files in this order:
-
-**1. CLAUDE.md** (project root)
+Create a CLAUDE.md in the project root (aim for under 30 lines). Include only what the agent can't find by reading code:
 
 ```markdown
 # {Project Name}
 
-{Brief description from discovered info}
+WordPress {theme|plugin}.
 
-## Code Style
+## Environments
 
-- **Namespace**: `{Namespace}\`
-- **Prefix**: `{prefix}-` for post types, taxonomies, blocks
-- **Constants**: `{PREFIX}_` prefix
-- **PHP**: WordPress Coding Standards
-- **JS**: Modern vanilla JavaScript, no jQuery
-- **CSS**: {methodology}
+- Local: {url}
+- Staging: {url}
+- Production: {url}
 
-## Custom Blocks
+## Team Conventions
 
-{count} blocks in `{blocks path}`:
-{List blocks as bullet points}
-
-## Post Types
-
-{List post types with slugs}
-
-## Taxonomies
-
-{List taxonomies with slugs}
-
-## Development Commands
-
-```bash
-nvm use              # Node {version}
-{build command}      # Production build
-{watch command}      # Development watch
-{lint command}       # PHP linting
+- {Deployment workflow}
+- {Branching/PR conventions}
+- {Any tribal knowledge from step 3}
 ```
 
-## Documentation
+Do NOT include: build commands, block inventories, post types, taxonomies, PHP namespaces, function prefixes, or file structure. The agent discovers these by reading `package.json`, `block.json`, and grepping the codebase.
 
-See [docs/README.md](docs/README.md) for full documentation.
-```
+## 5. Migrate legacy files (if found in step 1)
 
-**2. .cursor/rules/** (5 folders, each with RULE.md)
+- **`.cursorrules`**: Extract any environment URLs, team conventions, or tribal knowledge. Merge relevant parts into the CLAUDE.md from step 4. Discard the rest (build commands, code patterns — the agent finds these itself).
+- **`.cursor/rules/*.mdc`**: For each file, create a matching folder with a `RULE.md` file (e.g., `.cursor/rules/php-standards/RULE.md`). Copy the content, converting frontmatter from `.mdc` format to standard markdown frontmatter.
 
-| Folder | Frontmatter | Content |
-|--------|-------------|---------|
-| project-context/ | `alwaysApply: true` | Project structure, tech stack, key components, **full documentation index** |
-| development-workflow/ | `alwaysApply: true` | Commands from package.json/composer.json, git workflow, code quality |
-| php-standards/ | `globs: *.php` | Namespace, naming conventions, security patterns, performance |
-| wordpress-components/ | `globs: blocks/**/*,includes/blocks/**/*,inc/post-types/**/*,inc/taxonomies/**/*` | Blocks list with structure, post types, taxonomies, custom fields |
-| frontend-standards/ | `globs: *.js,*.ts,*.jsx,*.tsx,*.scss,*.css` | No jQuery rule, ES6+ patterns, CSS methodology, build process |
+Show the user:
+- The proposed CLAUDE.md content
+- Migration plan for any legacy files (what moves where, what gets discarded)
 
-**3. docs/** (8-12 markdown files)
+Apply on confirmation. Delete legacy files after successful migration.
 
-| File | Content |
-|------|---------|
-| README.md | Entry point with navigation |
-| project-overview.md | Project context, goals |
-| development-workflow.md | Setup, branching, testing, build |
-| environments.md | Local, staging, production |
-| architecture.md | System design with Mermaid diagrams |
-| features.md | Core functionality |
-| integrations.md | Third-party services |
-| operations.md | Database, caching, troubleshooting |
-| api.md | API docs (if applicable) |
-| content-types.md | CPTs, taxonomies, fields (WordPress) |
-| block-editor.md | Custom blocks, patterns (WordPress) |
-| themes.md | Theme structure (WordPress) |
+</process>
 
-**4. Delete legacy files**
-
-- `.cursor/rules/*.mdc` - content migrated to folder structure
-- `.cursorrules` - content merged to CLAUDE.md
-
-</phase_4_generation>
-
-<phase_5_summary>
-
-```
-Changes applied successfully.
-
-Created:
-  - CLAUDE.md (if new)
-  - .cursor/rules/project-context/RULE.md
-  - .cursor/rules/development-workflow/RULE.md
-  - .cursor/rules/php-standards/RULE.md
-  - .cursor/rules/wordpress-components/RULE.md
-  - .cursor/rules/frontend-standards/RULE.md
-  - docs/{new files only}
-
-Modified:
-  - CLAUDE.md (if existed)
-  - docs/{existing files updated}
-  - .cursor/rules/{existing rules updated}
-
-Deleted:
-  - {legacy files} (migrated)
-
-Next steps:
-  git add CLAUDE.md .cursor docs
-  git commit -m "Initialize WordPress project configuration"
-```
-
-</phase_5_summary>
-
-<critical_rules>
-
-**project-context/RULE.md must include a Documentation section:**
-
-```markdown
-## Documentation
-
-Reference these docs for detailed context:
-
-- [Project Overview](../../docs/project-overview.md) - {brief description}
-- [Architecture](../../docs/architecture.md) - {brief description}
-- [Development Workflow](../../docs/development-workflow.md) - {brief description}
-- [Content Types](../../docs/content-types.md) - {brief description}
-- [Block Editor](../../docs/block-editor.md) - {brief description}
-- [Environments](../../docs/environments.md) - {brief description}
-{...list ALL docs files that exist or are created}
-```
-
-This ensures the AI always knows about and references project documentation.
-
-**Handling existing docs/ files:**
-
-NEVER skip existing `docs/` files. For each file:
-1. Read the existing content entirely
-2. Compare with discoveries from Phase 1
-3. **Preserve** - Keep existing content that is accurate and valuable
-4. **Update** - Modify outdated information (versions, counts, file paths)
-5. **Merge** - Add new discoveries not yet documented
-6. **Remove** - Delete references to components that no longer exist
-
-Show these as modifications in Phase 3 diff preview, not new files. Existing content takes priority.
-
-</critical_rules>
+<output_rules>
+- Keep CLAUDE.md under 30 lines — less is more
+- Only include information the agent cannot discover from code
+- Show diff preview before applying any changes
+- No preambles or meta-commentary
+</output_rules>
 
 <error_handling>
 
@@ -302,22 +85,7 @@ Show these as modifications in Phase 3 diff preview, not new files. Existing con
 |----------|----------|
 | Not a WordPress project | Error: "No WordPress installation detected. This command is for WordPress projects." |
 | No git repository | Warning, continue without git-related features |
-| Permission denied | Error with specific file/directory |
+| CLAUDE.md already exists | Show proposed changes as a diff against existing content |
 | User declines changes | Exit: "No changes made." |
 
 </error_handling>
-
-<output_rules>
-- Keep output concise. Avoid verbose explanations.
-- Discovery output is informational
-- Diff preview is the primary output before changes
-- Summary confirms what was done
-- No preambles ("Here's what I found...")
-- No unnecessary commentary
-- Clean, scannable format throughout
-</output_rules>
-
-<legacy_migration>
-- **`.mdc` files:** Read content, create equivalent folder with RULE.md, delete after approval.
-- **`.cursorrules`:** Read content, merge into CLAUDE.md, delete after approval.
-</legacy_migration>
