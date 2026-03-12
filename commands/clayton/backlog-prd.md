@@ -1,27 +1,31 @@
 ---
 name: Backlog PRD
-description: Write a detailed engineering PRD for a triaged ticket and post it as a Teamwork comment
+description: Skill that writes a detailed engineering PRD for a triaged ticket and posts it as a Teamwork comment
 ---
 
 # Backlog PRD
 
-Writes a detailed engineering PRD for a ticket tagged `good-first-issue` and posts it as a Teamwork comment. Used by `/clayton/backlog` during the PRD phase.
+Writes a detailed engineering PRD for a ticket tagged `good-first-issue` and posts it as a Teamwork comment. Invoked by a backlog worker agent — not meant to be run directly.
+
+## Input
+
+Receives a ticket ID as an argument. Fetch the full ticket from Teamwork via `getTaskById`.
 
 <process>
 
 ## 1. Load ticket context
 
-- Fetch the full ticket details from Teamwork via `getTaskById`
 - Read the title, description, tags, and any existing comments
+- If the ticket already has a PRD comment (contains "## Engineering Approach"), skip — it's already done
 
 ## 2. Analyze codebase
 
 Perform targeted codebase analysis:
 
-- **Identify affected files** — which files need to change? Search for related blocks, templates, partials, post types, taxonomies, styles
+- **Identify affected files** — search for related blocks, templates, partials, post types, taxonomies, styles
 - **Find existing patterns** — how are similar features implemented? What conventions are used?
 - **Map dependencies** — what calls or includes the affected code? What would break?
-- **Check for reusable components** — existing blocks, partials, utilities, helpers that can be leveraged
+- **Check for reusable components** — existing blocks, partials, utilities, helpers
 - **Note naming conventions** — block names, CSS class prefixes, function prefixes, namespace patterns
 
 ## 3. Write PRD
@@ -70,6 +74,6 @@ BE: [hours] — [brief scope note]
 - PRD must reference specific file paths from the codebase
 - Acceptance criteria must be testable — no vague statements
 - Engineering approach provides direction without dictating exact implementation
-- Estimate hours should be realistic for the scope (not padded)
-- The PRD is the comment body — no wrapper text, no "Here's the PRD..."
+- Estimate hours should be realistic for the scope
+- The PRD is the comment body — no wrapper text
 </output_rules>

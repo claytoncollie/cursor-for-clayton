@@ -26,11 +26,13 @@ Commands are namespaced under `commands/clayton/` and cover Teamwork-specific wo
 
 Autonomous pipeline for bulk backlog processing. Point it at Teamwork task lists and it triages, writes PRDs, executes code, and reviews PRs — designed to run overnight unattended.
 
-- **backlog** - Main orchestrator (`/backlog "List Name 1" "List Name 2"`)
-- **backlog-triage** - Classify tickets as code-solvable or skip (with reason tags)
-- **backlog-prd** - Write engineering PRD and post as Teamwork comment
-- **backlog-execute** - Branch, implement, lint, test, and open MR/PR
-- **backlog-review** - Review diff against requirements, auto-fix or flag for human
+- **backlog** - Command: orchestrator (`/backlog "List Name 1" "List Name 2"`)
+- **backlog-triage** - Skill: classify tickets as code-solvable or skip (invoked by orchestrator)
+- **backlog-prd** - Skill: write engineering PRD as Teamwork comment (invoked by worker agent)
+- **backlog-execute** - Skill: branch, implement, lint, test, open MR/PR (invoked by worker agent)
+- **backlog-review** - Skill: review diff, auto-fix or flag (invoked by worker agent)
+
+Architecture: `/backlog` runs triage sequentially, then spawns parallel worker agents (one per ticket, worktree-isolated). Each worker invokes the PRD → execute → review skills in order.
 
 Commands that Claude Code handles natively (planning, debugging, testing, code review, documentation) have been removed in favor of built-in capabilities.
 

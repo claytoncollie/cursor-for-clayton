@@ -1,11 +1,15 @@
 ---
 name: Backlog Review
-description: Review a PR/MR against its ticket requirements and PRD, auto-fix issues or flag for human review
+description: Skill that reviews a PR/MR against its ticket requirements and PRD, auto-fixes issues or flags for human review
 ---
 
 # Backlog Review
 
-Reviews a PR/MR diff against the ticket requirements and PRD. Auto-fixes issues when possible, flags for human review when not. Used by `/clayton/backlog` during the review phase.
+Reviews a PR/MR diff against the ticket requirements and PRD. Auto-fixes issues when possible, flags for human review when not. Invoked by a backlog worker agent — not meant to be run directly.
+
+## Input
+
+Receives a ticket ID as an argument. Fetch the full ticket and comments from Teamwork to find the PRD and MR/PR link.
 
 <process>
 
@@ -27,31 +31,28 @@ Check the diff against these criteria:
 - Are there missing edge cases?
 
 ### Security
-- No XSS vulnerabilities (unescaped output in templates)
+- No XSS (unescaped output in templates)
 - No SQL injection (raw queries without preparation)
-- No command injection
-- Proper input validation and output sanitization
-- Proper use of WordPress escaping functions (`esc_html`, `esc_attr`, `wp_kses`, etc.)
+- Proper WordPress escaping (`esc_html`, `esc_attr`, `wp_kses`, etc.)
+- Input validation and output sanitization
 
 ### Performance
 - No unnecessary database queries in loops
-- No missing caching where patterns exist in the codebase
+- No missing caching where patterns exist
 - No large unoptimized asset additions
 
 ### Conventions
 - Follows existing naming patterns (functions, classes, CSS, blocks)
 - File placement matches project structure
 - Code style matches surrounding code
-- Comments only where logic is non-obvious
 
 ### Scope
-- Changes are limited to what the ticket requires
+- Changes limited to what the ticket requires
 - No unrelated refactors, cleanups, or improvements
-- No added dependencies without justification
 
 ## 3. Classify findings
 
-For each issue found, classify as:
+For each issue found:
 
 - **auto-fixable** — lint issues, missing escaping, naming inconsistency, minor logic fix
 - **needs-human** — architectural concern, ambiguous requirement, scope question, design decision
@@ -62,44 +63,42 @@ If auto-fixable issues found:
 
 1. Check out the PR branch
 2. Make targeted fixes (only address identified issues)
-3. Run quality checks to confirm the fix doesn't break anything
-4. Commit with message: `fix: address review findings (#{ticket-id})`
+3. Run quality checks
+4. Commit: `fix: address review findings (#{ticket-id})`
 5. Push
 6. Re-review the updated diff
 7. Repeat up to 2 total fix attempts
 
-## 5. Post review
+## 5. Post results
 
-### If all checks pass (no issues or all auto-fixed):
+### All checks pass (no issues or all auto-fixed):
 
 - Tag the ticket `review-passed` via `updateTask`
-- Post a brief summary comment on the ticket:
+- Post summary comment on the ticket:
 
 ```markdown
 **Review passed.** MR/PR is ready for human merge.
 
-Changes reviewed:
-- [1-2 sentence summary of what was checked]
 - All acceptance criteria addressed
 - Quality checks passing
+- {1 sentence on what was verified}
 ```
 
-### If needs-human issues remain:
+### Needs-human issues remain:
 
 - Tag the ticket `needs-human` via `updateTask`
-- Post detailed findings as a Teamwork comment:
+- Post detailed findings as Teamwork comment:
 
 ```markdown
 **Review: needs human attention.**
 
 ### Issues Found
 
-1. **[Category]**: [Description of the issue and why it needs human judgment]
-2. **[Category]**: [Description]
+1. **[Category]**: [Description and why it needs human judgment]
 
 ### Auto-fixed
 
-- [List of issues that were automatically resolved, if any]
+- [Issues that were automatically resolved, if any]
 
 ### MR/PR
 
@@ -110,8 +109,7 @@ Changes reviewed:
 
 <output_rules>
 - Review every file in the diff, not just a sampling
-- Reference specific line numbers and file paths in findings
+- Reference specific file paths and line numbers in findings
 - Auto-fix only clear-cut issues — when in doubt, flag for human
 - Never approve changes that introduce security vulnerabilities
-- Keep review comments actionable and specific
 </output_rules>

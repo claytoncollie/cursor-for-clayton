@@ -1,20 +1,23 @@
 ---
 name: Backlog Execute
-description: Implement code changes for a triaged ticket with PRD, create branch, and open MR/PR
+description: Skill that implements code changes for a triaged ticket, creates a branch, and opens an MR/PR
 ---
 
 # Backlog Execute
 
-Implements the code changes described in a ticket's PRD, creates a branch, runs quality checks, and opens an MR/PR. Used by `/clayton/backlog` during the execution phase.
+Implements the code changes described in a ticket's PRD, creates a branch, runs quality checks, and opens an MR/PR. Invoked by a backlog worker agent — not meant to be run directly.
+
+## Input
+
+Receives a ticket ID and base branch as arguments. Fetch the full ticket from Teamwork via `getTaskById`.
 
 <process>
 
 ## 1. Load context
 
-- Fetch the ticket from Teamwork via `getTaskById`
-- Read the PRD comment (the most recent comment containing "## Engineering Approach")
-- Determine VCS host from `git remote get-url origin` (GitHub → `gh`, GitLab → `glab`)
-- Determine base branch (usually `trunk`, `main`, or `master`)
+- Read all comments to find the PRD (the comment containing "## Engineering Approach")
+- If no PRD comment found, stop and report failure
+- Detect VCS host from `git remote get-url origin` (GitHub → `gh`, GitLab → `glab`)
 
 ## 2. Create branch
 
@@ -22,6 +25,7 @@ Implements the code changes described in a ticket's PRD, creates a branch, runs 
   - `{ticket-id}` is the Teamwork task ID
   - `{kebab-slug}` is the ticket title, lowercased, spaces to hyphens, max 50 chars, stripped of special characters
 - Create from the base branch: `git checkout -b agent/{ticket-id}-{kebab-slug} origin/{base-branch}`
+- If branch exists, append `-2` and retry
 
 ## 3. Implement changes
 
@@ -35,43 +39,30 @@ Follow the PRD's Engineering Approach:
 
 ## 4. Run quality checks
 
-Run the project's quality gates:
+Run the project's quality gates (only for file types changed):
 
 ```bash
-# JavaScript/CSS (if changed)
-npm run lint-js
-npm run lint-style
-
-# PHP (if changed)
-composer lint
-composer static
-
-# Tests
-npm run test        # JS tests
-composer test       # PHP tests (if available)
+npm run lint-js        # JS changes
+npm run lint-style     # CSS changes
+composer lint           # PHP changes
+composer static         # PHP changes
+npm run test            # JS tests
 ```
-
-Only run checks relevant to the files changed.
 
 ## 5. Auto-fix failures
 
 If any quality check fails:
 
 1. Read the error output
-2. Fix the issue (lint auto-fix first: `npm run lint-js -- --fix`, `composer lint-fix`)
+2. Try auto-fix first: `npm run lint-js -- --fix`, `composer lint-fix`
 3. Re-run the failing check
 4. Repeat up to 3 total attempts
-
-If still failing after 3 attempts:
-- Tag the ticket `needs-human` via `updateTask`
-- Post the failure output as a Teamwork comment via `createComment`
-- Stop execution for this ticket
+5. If still failing: stop, tag ticket `needs-human`, post failure output as Teamwork comment
 
 ## 6. Commit
 
 - Stage only the files you changed (explicit paths, not `git add -A`)
 - Do NOT stage secrets, `.env`, or unrelated files
-- Write a commit message:
 
 ```
 git commit -m "$(cat <<'EOF'
@@ -87,26 +78,24 @@ EOF
 ## 7. Push and create MR/PR
 
 - Push: `git push -u origin agent/{ticket-id}-{kebab-slug}`
-- Create MR/PR with:
-  - **Title**: commit subject line
-  - **Body/Description**:
+- **GitHub**: `gh pr create --title "..." --body "$(cat <<'EOF' ... EOF)"`
+- **GitLab**: `glab mr create --title "..." --description "$(cat <<'EOF' ... EOF)"`
+
+MR/PR body format:
 
 ```markdown
 ## Summary
 
-{2-3 bullets describing the change}
+- {2-3 bullets describing the change}
 
 ## Teamwork
 
-{link to Teamwork ticket}
+#{ticket-id}
 
 ## Acceptance Criteria
 
 {copied from PRD}
 ```
-
-- **GitHub**: `gh pr create --title "..." --body "$(cat <<'EOF' ... EOF)"`
-- **GitLab**: `glab mr create --title "..." --description "$(cat <<'EOF' ... EOF)"`
 
 ## 8. Post back to Teamwork
 
@@ -127,10 +116,9 @@ EOF
 
 | Scenario | Behavior |
 |----------|----------|
-| PRD comment not found on ticket | Stop, tag `needs-human`, post error as comment |
-| Branch name already exists | Append `-2` suffix and retry |
+| PRD comment not found | Stop, tag `needs-human`, post error as comment |
+| Branch name collision | Append `-2` suffix and retry |
 | Lint/test failures after 3 attempts | Tag `needs-human`, post failures as comment, stop |
-| Push fails | Retry once, then tag `needs-human` and stop |
-| MR/PR creation fails | Post error as Teamwork comment, tag `needs-human` |
+| Push or MR/PR creation fails | Retry once, then tag `needs-human` and stop |
 
 </error_handling>
