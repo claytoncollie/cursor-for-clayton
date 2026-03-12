@@ -20,6 +20,17 @@ Commands are namespaced under `commands/clayton/` and cover Teamwork-specific wo
 - **execute-plan** - Work through PRD tasks interactively with progress tracking
 - **handoff-qa** - Generate QA documentation for Teamwork
 - **init-wordpress** - Initialize WordPress project with docs, rules, and CLAUDE.md
+- **commit-push-pr** - Commit, push, and open a PR/MR with CI watch and auto-fix
+
+#### Backlog Pipeline
+
+Autonomous pipeline for bulk backlog processing. Point it at Teamwork task lists and it triages, writes PRDs, executes code, and reviews PRs — designed to run overnight unattended.
+
+- **backlog** - Main orchestrator (`/backlog "List Name 1" "List Name 2"`)
+- **backlog-triage** - Classify tickets as code-solvable or skip (with reason tags)
+- **backlog-prd** - Write engineering PRD and post as Teamwork comment
+- **backlog-execute** - Branch, implement, lint, test, and open MR/PR
+- **backlog-review** - Review diff against requirements, auto-fix or flag for human
 
 Commands that Claude Code handles natively (planning, debugging, testing, code review, documentation) have been removed in favor of built-in capabilities.
 
@@ -87,13 +98,29 @@ ln -sf ~/www/cursor-for-clayton/commands/clayton ~/.claude-work/commands/clayton
 ln -sf ~/www/cursor-for-clayton/commands ~/.cursor/commands
 ```
 
-## Workflow
+## Workflows
+
+### Manual (interactive)
 
 ```
 1. /estimate-ticket  → Create engineering ticket for Teamwork
 2. /execute-plan     → Work through tasks with progress tracking
-3. /handoff-qa       → Generate QA documentation for Teamwork
+3. /commit-push-pr   → Commit, push, and open PR/MR
+4. /handoff-qa       → Generate QA documentation for Teamwork
 ```
+
+### Autonomous (overnight)
+
+```
+/backlog "Museum Backlog" "Museum Up Next"
+  → TRIAGE   — classify tickets, tag code-solvable ones
+  → PRD      — write engineering approach as Teamwork comment
+  → EXECUTE  — branch, code, lint, test, open MR/PR
+  → REVIEW   — diff vs requirements, auto-fix or flag needs-human
+```
+
+State tags track progress: `good-first-issue` → `prd-written` → `pr-open` → `review-passed`.
+Re-running the same command resumes where it left off.
 
 `/init-wordpress` is a one-time setup command for new WordPress projects.
 

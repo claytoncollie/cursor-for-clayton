@@ -62,14 +62,14 @@
       "Read(**/id_rsa)",
       "Read(**/id_dsa)",
       "Read(**/.ssh/id_*)",
-	  "Read(**/node_modules/**)",
+      "Read(**/node_modules/**)",
       "Read(**/vendor/**)",
       "Read(**/dist/**)",
       "Read(languages/**)",
       "Read(gravityforms/**)",
       "Read(polylang/**)",
       "Read(polylang-pro/**)",
-	  "Read(plugins/ui-kit-copyright/**)",
+      "Read(plugins/ui-kit-copyright/**)",
       "Read(plugins/ui-kit-core/**)",
       "Read(plugins/ui-kit-icons/**)",
       "Read(plugins/ui-kit-navigation/**)",
@@ -114,5 +114,6 @@
   },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "autoUpdate": true
+  "autoUpdate": true,
+  "effortLevel": "high"
 }
