@@ -1,11 +1,11 @@
 ---
 name: Backlog Review
-description: Skill that reviews a PR/MR against its ticket requirements and PRD, auto-fixes issues or flags for human review
+description: Skill that reviews an MR/PR against its ticket requirements and PRD, auto-fixes issues or flags for human review
 ---
 
 # Backlog Review
 
-Reviews a PR/MR diff against the ticket requirements and PRD. Auto-fixes issues when possible, flags for human review when not. Invoked by a backlog worker agent — not meant to be run directly.
+Reviews an MR/PR diff against the ticket requirements and PRD. Auto-fixes issues when possible, flags for human review when not. Invoked by a review agent spawned from the `/backlog` orchestrator — not meant to be run directly.
 
 ## Input
 

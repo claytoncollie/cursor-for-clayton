@@ -5,7 +5,7 @@ description: Skill that evaluates a Teamwork ticket against the codebase and cla
 
 # Backlog Triage
 
-Evaluates a single Teamwork ticket against the codebase to determine if it can be solved with a code change. Invoked by the `/backlog` orchestrator during the triage phase — not meant to be run directly.
+Evaluates a single Teamwork ticket against the codebase to determine if it can be solved with a code change. Invoked by a triage agent spawned from the `/backlog` orchestrator — not meant to be run directly.
 
 ## Input
 

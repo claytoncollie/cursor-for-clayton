@@ -5,7 +5,7 @@ description: Skill that writes a detailed engineering PRD for a triaged ticket a
 
 # Backlog PRD
 
-Writes a detailed engineering PRD for a ticket tagged `good-first-issue` and posts it as a Teamwork comment. Invoked by a backlog worker agent — not meant to be run directly.
+Writes a detailed engineering PRD for a ticket tagged `good-first-issue` and posts it as a Teamwork comment. Invoked by a PRD agent spawned from the `/backlog` orchestrator — not meant to be run directly.
 
 ## Input
 

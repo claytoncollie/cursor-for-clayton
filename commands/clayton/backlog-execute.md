@@ -5,7 +5,7 @@ description: Skill that implements code changes for a triaged ticket, creates a 
 
 # Backlog Execute
 
-Implements the code changes described in a ticket's PRD, creates a branch, runs quality checks, and opens an MR/PR. Invoked by a backlog worker agent — not meant to be run directly.
+Implements the code changes described in a ticket's PRD, creates a branch, runs quality checks, and opens an MR/PR. Invoked by an execute agent spawned from the `/backlog` orchestrator — not meant to be run directly.
 
 ## Input
 

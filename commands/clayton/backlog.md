@@ -1,12 +1,12 @@
 ---
 name: Backlog Pipeline
-description: Autonomous pipeline that triages a Teamwork backlog, writes PRDs, executes code changes, and reviews PRs
+description: Autonomous pipeline that triages a Teamwork backlog, writes PRDs, executes code changes, and reviews MRs
 user_invocable: true
 ---
 
 # Backlog Pipeline
 
-Autonomous pipeline for bulk backlog processing. Point it at Teamwork task lists and it triages, writes PRDs, executes code, and reviews PRs — designed to run overnight unattended.
+Autonomous pipeline for bulk backlog processing. Point it at Teamwork task lists and it fetches tickets, triages them, writes PRDs, opens MRs, and reviews the results — designed to run overnight unattended.
 
 ## Usage
 
@@ -25,23 +25,30 @@ Autonomous pipeline for bulk backlog processing. Point it at Teamwork task lists
 
 ## Phase 2: Fetch tickets
 
-- Call `getTaskListsByProjectId` with the project ID
-- Match each user-provided list name (case-insensitive) against returned lists
-- If a name has no match, warn and continue with the others
-- If no names match, stop with an error listing available list names
-- For each matched task list, fetch all open tickets
-- Deduplicate by ticket ID
+Use the **Skill tool** to invoke `/clayton/backlog-fetch` with the list names as arguments.
+
+The skill returns a structured list of open tickets with their IDs, titles, descriptions, and existing tags.
 
 ## Phase 3: Triage
 
-Use the **Skill tool** to invoke `/clayton/backlog-triage` for each ticket sequentially.
+For each ticket returned by the fetch skill, launch a **triage agent** using the **Agent tool**.
 
-Pass each ticket's ID, title, description, and existing tags. The skill will:
-- Classify the ticket as code-solvable (`good-first-issue`) or skip (with reason tag)
-- Respect existing pipeline/skip tags — already-processed tickets are skipped
-- Update the ticket's tags in Teamwork
+Agent prompt template:
 
-Print a triage summary table when complete:
+```
+You are a triage agent. Evaluate Teamwork ticket #{ticket_id} ("{title}") against this project's codebase to determine if it can be solved with a code change.
+
+Ticket description:
+{description}
+
+Existing tags: {tags}
+
+Use the Skill tool to invoke /clayton/backlog-triage with args: "{ticket_id}"
+
+Return the classification result.
+```
+
+Triage agents can run in parallel. Collect all results and print a summary table:
 
 ```
 | # | Ticket | Title                    | Decision          |
@@ -52,36 +59,60 @@ Print a triage summary table when complete:
 Tagged: X code-solvable, Y skipped
 ```
 
-## Phase 4: Parallel ticket workers
+## Phase 4: Write PRDs
 
-For each ticket tagged `good-first-issue` (and not already `prd-written` or beyond), launch a worker using the **Agent tool** with `isolation: "worktree"`.
+For each ticket tagged `good-first-issue` (and not already `prd-written` or beyond), launch a **PRD agent** using the **Agent tool**.
 
-Each worker agent runs three skills **sequentially** on its ticket:
-
-1. **Skill: `/clayton/backlog-prd`** — Analyze codebase, write engineering PRD, post as Teamwork comment, tag `prd-written`
-2. **Skill: `/clayton/backlog-execute`** — Branch, implement, lint, test, open MR/PR, post link to Teamwork, tag `pr-open`
-3. **Skill: `/clayton/backlog-review`** — Review diff against requirements, auto-fix or tag `needs-human`, tag `review-passed` if clean
-
-**Worker agent prompt template:**
+Agent prompt template:
 
 ```
-You are a backlog worker processing Teamwork ticket #{ticket_id}: "{title}".
-Project ID: {project_id}. VCS: {gh|glab}. Base branch: {base_branch}.
+You are a PRD writer agent. Analyze the codebase and write a detailed engineering PRD for Teamwork ticket #{ticket_id} ("{title}").
 
-Run these three skills in order using the Skill tool:
-1. /clayton/backlog-prd — args: "{ticket_id}"
-2. /clayton/backlog-execute — args: "{ticket_id} {base_branch}"
-3. /clayton/backlog-review — args: "{ticket_id}"
+Ticket description:
+{description}
 
-Stop and tag the ticket `needs-human` if any skill fails after its retry limit.
-Report the final state: which skills succeeded and the MR/PR URL if created.
+Use the Skill tool to invoke /clayton/backlog-prd with args: "{ticket_id}"
+
+Return the PRD content and confirmation that it was posted to Teamwork.
 ```
 
-Launch agents in parallel — up to 5 concurrent workers. Queue the rest and launch as workers complete.
+PRD agents can run in parallel. Wait for all to complete before proceeding.
 
-## Phase 5: Final summary
+## Phase 5: Execute — write MRs
 
-After all workers finish, print a pipeline summary:
+For each ticket tagged `prd-written` (and not already `pr-open` or beyond), launch an **execute agent** using the **Agent tool** with `isolation: "worktree"`.
+
+Agent prompt template:
+
+```
+You are an execution agent. Implement the code changes described in the PRD for Teamwork ticket #{ticket_id} ("{title}").
+
+Project: {project_id}. VCS: {gh|glab}. Base branch: {base_branch}.
+
+Use the Skill tool to invoke /clayton/backlog-execute with args: "{ticket_id} {base_branch}"
+
+Return the MR/PR URL and final status.
+```
+
+Execute agents MUST use worktree isolation (one branch per ticket). Run in parallel, up to 5 concurrent. Queue the rest.
+
+## Phase 6: Review MRs
+
+For each ticket tagged `pr-open` (and not already `review-passed`), launch a **review agent** using the **Agent tool**.
+
+Agent prompt template:
+
+```
+You are a code review agent. Review the MR/PR for Teamwork ticket #{ticket_id} ("{title}") against the ticket requirements and PRD.
+
+Use the Skill tool to invoke /clayton/backlog-review with args: "{ticket_id}"
+
+Return the review findings and final status.
+```
+
+Review agents can run in parallel. Collect all results.
+
+## Phase 7: Final summary
 
 ```
 ### Backlog Pipeline Complete
@@ -91,7 +122,7 @@ Triaged: X tickets
   - Skipped: Z (needs-design: A, needs-investigation: B, ...)
 
 PRDs written: N
-PRs opened: M
+MRs opened: M
 Reviews passed: P
 Needs human review: Q
 
@@ -109,12 +140,12 @@ The pipeline is resumable. Re-running `/backlog` with the same lists will:
 - Skip tickets already tagged with state tags (`prd-written`, `pr-open`, `review-passed`)
 - Skip tickets tagged with skip reasons
 - Only process new or untagged tickets
-- Pick up `good-first-issue` tickets that haven't reached `prd-written` yet
+- Pick up partially-processed tickets at the next unfinished stage
 </resumability>
 
 <output_rules>
-- Print the triage summary table after Phase 3 completes
-- Print the final pipeline summary when all agents finish
+- Print the triage summary table after Phase 3
+- Print the final pipeline summary after Phase 6
 - Log each stage transition per ticket (one line: ticket ID, stage, status)
 - Do not ask for human input at any point — this runs unattended
 </output_rules>
