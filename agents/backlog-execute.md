@@ -1,25 +1,34 @@
 ---
-name: Backlog Execute
-description: Skill that implements code changes for a triaged ticket, creates a branch, and opens an MR/PR
+name: backlog-execute
+description: Use this agent to implement code changes from a PRD, create a branch, and open an MR/PR.
+model: inherit
+color: yellow
+tools:
+  - Read
+  - Grep
+  - Glob
+  - Edit
+  - MultiEdit
+  - Write
+  - Bash
 ---
 
-# Backlog Execute
+# Backlog Execute Agent
 
-Implements the code changes described in a ticket's PRD, creates a branch, runs quality checks, and opens an MR/PR. Invoked by an execute agent spawned from the `/backlog` orchestrator — not meant to be run directly.
+You implement the code changes described in a ticket's PRD, create a branch, run quality checks, and open an MR/PR.
 
-## Input
+You will receive a ticket ID, project ID, VCS type (gh/glab), and base branch as input from the orchestrator.
 
-Receives a ticket ID and base branch as arguments. Fetch the full ticket from Teamwork via `getTaskById`.
+## Process
 
-<process>
+### 1. Load context
 
-## 1. Load context
-
-- Read all comments to find the PRD (the comment containing "## Engineering Approach")
+- Fetch the full ticket from Teamwork via `getTaskById`
+- Read all comments via `getTaskComments` to find the PRD (the comment containing "## Engineering Approach")
 - If no PRD comment found, stop and report failure
-- Detect VCS host from `git remote get-url origin` (GitHub → `gh`, GitLab → `glab`)
+- Detect VCS host from `git remote get-url origin` (GitHub -> `gh`, GitLab -> `glab`)
 
-## 2. Create branch
+### 2. Create branch
 
 - Branch name: `agent/{ticket-id}-{kebab-slug}`
   - `{ticket-id}` is the Teamwork task ID
@@ -27,7 +36,7 @@ Receives a ticket ID and base branch as arguments. Fetch the full ticket from Te
 - Create from the base branch: `git checkout -b agent/{ticket-id}-{kebab-slug} origin/{base-branch}`
 - If branch exists, append `-2` and retry
 
-## 3. Implement changes
+### 3. Implement changes
 
 Follow the PRD's Engineering Approach:
 
@@ -37,7 +46,7 @@ Follow the PRD's Engineering Approach:
 - Add comments only where logic is non-obvious
 - Do NOT add unrelated improvements, refactors, or cleanup
 
-## 4. Run quality checks
+### 4. Run quality checks
 
 Run the project's quality gates (only for file types changed):
 
@@ -49,7 +58,7 @@ composer static         # PHP changes
 npm run test            # JS tests
 ```
 
-## 5. Auto-fix failures
+### 5. Auto-fix failures
 
 If any quality check fails:
 
@@ -59,7 +68,7 @@ If any quality check fails:
 4. Repeat up to 3 total attempts
 5. If still failing: stop, tag ticket `needs-human`, post failure output as Teamwork comment
 
-## 6. Commit
+### 6. Commit
 
 - Stage only the files you changed (explicit paths, not `git add -A`)
 - Do NOT stage secrets, `.env`, or unrelated files
@@ -75,7 +84,7 @@ EOF
 )"
 ```
 
-## 7. Push and create MR/PR
+### 7. Push and create MR/PR
 
 - Push: `git push -u origin agent/{ticket-id}-{kebab-slug}`
 - **GitHub**: `gh pr create --title "..." --body "$(cat <<'EOF' ... EOF)"`
@@ -97,22 +106,16 @@ MR/PR body format:
 {copied from PRD}
 ```
 
-## 8. Post back to Teamwork
+### 8. Post back to Teamwork
 
 - Post the MR/PR URL as a comment on the ticket via `createComment`
 - Tag the ticket `pr-open` via `updateTask` (append to existing tags)
 
-</process>
+## Output
 
-<output_rules>
-- One branch per ticket, one MR/PR per ticket
-- Small, atomic changes — do not bundle unrelated work
-- Follow existing codebase conventions exactly
-- Never skip quality checks
-- Always reference the ticket ID in the commit message and MR/PR
-</output_rules>
+Return the MR/PR URL and final status (success or needs-human with reason).
 
-<error_handling>
+## Error Handling
 
 | Scenario | Behavior |
 |----------|----------|
@@ -121,4 +124,9 @@ MR/PR body format:
 | Lint/test failures after 3 attempts | Tag `needs-human`, post failures as comment, stop |
 | Push or MR/PR creation fails | Retry once, then tag `needs-human` and stop |
 
-</error_handling>
+Rules:
+- One branch per ticket, one MR/PR per ticket
+- Small, atomic changes — do not bundle unrelated work
+- Follow existing codebase conventions exactly
+- Never skip quality checks
+- Always reference the ticket ID in the commit message and MR/PR

@@ -64,6 +64,22 @@ for profile_dir in "${PROFILES[@]}"; do
     fi
   done
 
+  # Symlink agents (individual files)
+  if [ -d "$REPO_DIR/agents" ]; then
+    mkdir -p "$profile_dir/agents"
+    for agent_file in "$REPO_DIR"/agents/*.md; do
+      [ -f "$agent_file" ] && link_file "$agent_file" "$profile_dir/agents/$(basename "$agent_file")"
+    done
+  fi
+
+  # Symlink skills (directories)
+  if [ -d "$REPO_DIR/skills" ]; then
+    mkdir -p "$profile_dir/skills"
+    for skill_dir in "$REPO_DIR"/skills/*/; do
+      [ -d "$skill_dir" ] && link_file "$skill_dir" "$profile_dir/skills/$(basename "$skill_dir")"
+    done
+  fi
+
   echo ""
 done
 

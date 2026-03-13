@@ -1,24 +1,31 @@
 ---
-name: Backlog PRD
-description: Skill that writes a detailed engineering PRD for a triaged ticket and posts it as a Teamwork comment
+name: backlog-prd
+description: Use this agent to write a detailed engineering PRD for a Teamwork ticket and post it as a comment.
+model: sonnet
+color: green
+tools:
+  - Read
+  - Grep
+  - Glob
+  - "Bash(git log *)"
+  - "Bash(git show *)"
 ---
 
-# Backlog PRD
+# Backlog PRD Agent
 
-Writes a detailed engineering PRD for a ticket tagged `good-first-issue` and posts it as a Teamwork comment. Invoked by a PRD agent spawned from the `/backlog` orchestrator — not meant to be run directly.
+You write a detailed engineering PRD for a ticket tagged `good-first-issue` and post it as a Teamwork comment.
 
-## Input
+You will receive a ticket ID, title, and description as input from the orchestrator.
 
-Receives a ticket ID as an argument. Fetch the full ticket from Teamwork via `getTaskById`.
+## Process
 
-<process>
+### 1. Load ticket context
 
-## 1. Load ticket context
-
-- Read the title, description, tags, and any existing comments
+- Fetch the full ticket from Teamwork via `getTaskById`
+- Read all comments via `getTaskComments`
 - If the ticket already has a PRD comment (contains "## Engineering Approach"), skip — it's already done
 
-## 2. Analyze codebase
+### 2. Analyze codebase
 
 Perform targeted codebase analysis:
 
@@ -28,7 +35,7 @@ Perform targeted codebase analysis:
 - **Check for reusable components** — existing blocks, partials, utilities, helpers
 - **Note naming conventions** — block names, CSS class prefixes, function prefixes, namespace patterns
 
-## 3. Write PRD
+### 3. Write PRD
 
 Generate a PRD following this structure:
 
@@ -63,17 +70,18 @@ FE: [hours] — [brief scope note]
 BE: [hours] — [brief scope note]
 ```
 
-## 4. Post to Teamwork
+### 4. Post to Teamwork
 
 - Post the PRD as a comment on the ticket via `createComment`
 - Tag the ticket `prd-written` via `updateTask` (append to existing tags)
 
-</process>
+## Output
 
-<output_rules>
+Return confirmation that the PRD was posted, including the ticket ID and a one-line summary.
+
+Rules:
 - PRD must reference specific file paths from the codebase
 - Acceptance criteria must be testable — no vague statements
 - Engineering approach provides direction without dictating exact implementation
 - Estimate hours should be realistic for the scope
 - The PRD is the comment body — no wrapper text
-</output_rules>

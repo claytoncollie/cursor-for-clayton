@@ -1,6 +1,6 @@
 ---
 name: Backlog Pipeline
-description: Autonomous pipeline that triages a Teamwork backlog, writes PRDs, executes code changes, and reviews MRs
+description: Autonomous pipeline that triages a Teamwork backlog, writes PRDs, executes code changes, and reviews MRs.
 user_invocable: true
 ---
 
@@ -11,8 +11,12 @@ Autonomous pipeline for bulk backlog processing. Point it at Teamwork task lists
 ## Usage
 
 ```
-/backlog "List Name 1" "List Name 2" ...
+/backlog "List Name 1" "List Name 2"
+/backlog 1783911 1781987
+/backlog "Museum Backlog" 1781987
 ```
+
+Arguments (`$ARGUMENTS`) can be quoted list names, numeric list IDs, or a mix of both.
 
 <process>
 
@@ -20,35 +24,33 @@ Autonomous pipeline for bulk backlog processing. Point it at Teamwork task lists
 
 - Read `.teamwork` file from the project root for `PROJECT_ID`
 - If missing, stop: "No `.teamwork` file found. Create one with `PROJECT_ID=<id>`."
-- Detect VCS host from `git remote get-url origin` (GitHub → `gh`, GitLab → `glab`)
+- Detect VCS host from `git remote get-url origin` (GitHub -> `gh`, GitLab -> `glab`)
 - Determine base branch from git (usually `trunk`, `main`, or `master`)
 
 ## Phase 2: Fetch tickets
 
-Use the **Skill tool** to invoke `/clayton/backlog-fetch` with the list names as arguments.
+Use the **Skill tool** to invoke `backlog-fetch` with `$ARGUMENTS` (the list names and/or IDs the user passed in).
 
-The skill returns a structured list of open tickets with their IDs, titles, descriptions, and existing tags.
+The skill runs in a forked context to keep API noise out of this window. It returns a structured list of open tickets with their IDs, titles, descriptions, and existing tags.
 
 ## Phase 3: Triage
 
-For each ticket returned by the fetch skill, launch a **triage agent** using the **Agent tool**.
+For each ticket returned by the fetch skill, launch a **backlog-triage** agent using the **Agent tool**.
 
 Agent prompt template:
 
 ```
-You are a triage agent. Evaluate Teamwork ticket #{ticket_id} ("{title}") against this project's codebase to determine if it can be solved with a code change.
+Evaluate Teamwork ticket #{ticket_id} ("{title}") against this project's codebase to determine if it can be solved with a code change.
 
 Ticket description:
 {description}
 
 Existing tags: {tags}
 
-Use the Skill tool to invoke /clayton/backlog-triage with args: "{ticket_id}"
-
-Return the classification result.
+Follow the triage process in your system prompt. Return the classification result.
 ```
 
-Triage agents can run in parallel. Collect all results and print a summary table:
+Triage agents can run in **parallel**. Use `model: "sonnet"` for speed. Collect all results and print a summary table:
 
 ```
 | # | Ticket | Title                    | Decision          |
@@ -61,58 +63,60 @@ Tagged: X code-solvable, Y skipped
 
 ## Phase 4: Write PRDs
 
-For each ticket tagged `good-first-issue` (and not already `prd-written` or beyond), launch a **PRD agent** using the **Agent tool**.
+For each ticket tagged `good-first-issue` (and not already `prd-written` or beyond), launch a **backlog-prd** agent using the **Agent tool**.
 
 Agent prompt template:
 
 ```
-You are a PRD writer agent. Analyze the codebase and write a detailed engineering PRD for Teamwork ticket #{ticket_id} ("{title}").
+Analyze the codebase and write a detailed engineering PRD for Teamwork ticket #{ticket_id} ("{title}").
 
 Ticket description:
 {description}
 
-Use the Skill tool to invoke /clayton/backlog-prd with args: "{ticket_id}"
-
-Return the PRD content and confirmation that it was posted to Teamwork.
+Follow the PRD process in your system prompt. Return confirmation that the PRD was posted.
 ```
 
-PRD agents can run in parallel. Wait for all to complete before proceeding.
+PRD agents can run in **parallel**. Use `model: "sonnet"`. Wait for all to complete before proceeding.
 
-## Phase 5: Execute — write MRs
+## Phase 5: File overlap scan
 
-For each ticket tagged `prd-written` (and not already `pr-open` or beyond), launch an **execute agent** using the **Agent tool** with `isolation: "worktree"`.
+Before executing, parse the "Files to Modify" sections from each PRD to detect overlap:
+
+- If two or more tickets modify the same file, they must be serialized (not parallel)
+- Group conflicting tickets and execute them sequentially within each group
+- Non-conflicting tickets can still run in parallel
+
+## Phase 6: Execute — write MRs
+
+For each ticket tagged `prd-written` (and not already `pr-open` or beyond), launch a **backlog-execute** agent using the **Agent tool** with `isolation: "worktree"`.
 
 Agent prompt template:
 
 ```
-You are an execution agent. Implement the code changes described in the PRD for Teamwork ticket #{ticket_id} ("{title}").
+Implement the code changes described in the PRD for Teamwork ticket #{ticket_id} ("{title}").
 
 Project: {project_id}. VCS: {gh|glab}. Base branch: {base_branch}.
 
-Use the Skill tool to invoke /clayton/backlog-execute with args: "{ticket_id} {base_branch}"
-
-Return the MR/PR URL and final status.
+Follow the execution process in your system prompt. Return the MR/PR URL and final status.
 ```
 
-Execute agents MUST use worktree isolation (one branch per ticket). Run in parallel, up to 5 concurrent. Queue the rest.
+Execute agents MUST use worktree isolation (one branch per ticket). Run in parallel, up to **5 concurrent**. Queue the rest. Respect the serialization order from the file overlap scan.
 
-## Phase 6: Review MRs
+## Phase 7: Review MRs
 
-For each ticket tagged `pr-open` (and not already `review-passed`), launch a **review agent** using the **Agent tool**.
+For each ticket tagged `pr-open` (and not already `review-passed`), launch a **backlog-review** agent using the **Agent tool**.
 
 Agent prompt template:
 
 ```
-You are a code review agent. Review the MR/PR for Teamwork ticket #{ticket_id} ("{title}") against the ticket requirements and PRD.
+Review the MR/PR for Teamwork ticket #{ticket_id} ("{title}") against the ticket requirements and PRD.
 
-Use the Skill tool to invoke /clayton/backlog-review with args: "{ticket_id}"
-
-Return the review findings and final status.
+Follow the review process in your system prompt. Return the review findings and final status.
 ```
 
-Review agents can run in parallel. Collect all results.
+Review agents can run in **parallel**. Use `model: "sonnet"`. Collect all results.
 
-## Phase 7: Final summary
+## Phase 8: Final summary
 
 ```
 ### Backlog Pipeline Complete
@@ -127,8 +131,8 @@ Reviews passed: P
 Needs human review: Q
 
 MR/PR Links:
-- #12345 Fix header overflow → !2600
-- #12346 Add calendar export → !2601
+- #12345 Fix header overflow -> !2600
+- #12346 Add calendar export -> !2601
 ...
 ```
 
@@ -145,7 +149,7 @@ The pipeline is resumable. Re-running `/backlog` with the same lists will:
 
 <output_rules>
 - Print the triage summary table after Phase 3
-- Print the final pipeline summary after Phase 6
+- Print the final pipeline summary after Phase 8
 - Log each stage transition per ticket (one line: ticket ID, stage, status)
 - Do not ask for human input at any point — this runs unattended
 </output_rules>
@@ -155,7 +159,7 @@ The pipeline is resumable. Re-running `/backlog` with the same lists will:
 | Scenario | Behavior |
 |----------|----------|
 | No `.teamwork` file | Stop with setup instructions |
-| Task list name not found | Warn, continue with matched lists |
+| Task list name/ID not found | Warn, continue with matched lists |
 | No matching lists at all | Stop with error listing available list names |
 | Teamwork API failure | Retry once, then skip ticket and continue |
 | Agent crash | Log error, tag ticket `needs-human`, continue with next ticket |
